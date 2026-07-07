@@ -31,8 +31,14 @@ body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
 .navbar { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
 .nav-logo { font-size: 16px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; }
 .nav-logo span { background: var(--accent); color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-weight: 500; }
-.nav-stats { font-size: 12px; color: var(--text3); display: flex; gap: 16px; }
+.nav-stats { font-size: 12px; color: var(--text3); display: flex; gap: 16px; align-items: center; }
 .nav-stats b { color: var(--accent); }
+.nav-dl-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 14px; background: var(--accent); color: #fff; border-radius: 6px; font-size: 12px; font-weight: 500; text-decoration: none; transition: background .15s; }
+.nav-dl-btn:hover { background: #1d4ed8; color: #fff; }
+.btn-dl { flex: 1; padding: 6px 10px; font-size: 12px; border-radius: 6px; border: 1px solid var(--green-b); background: var(--green-bg); color: var(--green); cursor: pointer; font-weight: 500; transition: all .15s; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+.btn-dl:hover { background: var(--green); color: #fff; }
+.download-link-btn { display: inline-block; margin: 6px 0 10px; padding: 8px 16px; background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-b); border-radius: 7px; font-size: 12px; font-weight: 500; text-decoration: none; transition: all .15s; }
+.download-link-btn:hover { background: var(--orange); color: #fff; }
 
 /* 主布局 */
 .layout { display: flex; height: calc(100vh - 56px); }
@@ -179,7 +185,8 @@ body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
     <span>76个智能体</span>
   </div>
   <div class="nav-stats">
-    涵盖 <b>14</b> 大业务场景 &nbsp;|&nbsp; 输入需求秒级匹配 &nbsp;|&nbsp; 支持一键部署
+    涵盖 <b>14</b> 大业务场景 &nbsp;|&nbsp; 输入需求秒级匹配
+    <a class="nav-dl-btn" href="waidi-agent-kit.zip" download="waidi-agent-kit.zip">⬇️ 下载部署包</a>
   </div>
 </div>
 
@@ -366,6 +373,85 @@ const AGENTS_DB = [
   {"id":"MID-NEWBIZ-S06-OPS-PATROL","name":"新商运营巡逻","category":"发品上架","desc":"阿里国际站全链路运营深度实战。涵盖店铺基建、数据诊断、营销投放及优化落地四大板块，帮助新商快速从0到1建立阿里国际站运营体系。","keywords":["运营","巡逻","店铺","新商","P4P","RFQ","数据诊断","阿里国际站"],"opener":"你好！我来帮你巡逻阿里国际站店铺。请告诉我：①你的店铺主营品类 ②最近最让你头疼的问题（流量/询盘/转化/P4P/RFQ），我给你本周必须做的3件事+可执行的操作步骤。"}
 ];
 
+// ===================== 智能体包映射（每个智能体对应独立zip）=====================
+const AGENT_PACKAGES = {
+  "DID-01EC9671-35C7EAD1": {"file": "店铺装修Agent.zip", "size": "345KB"},
+  "DID-03ABBF9D-C2B66B3A": {"file": "月度复盘Agent.zip", "size": "410KB"},
+  "DID-04DA0953-72660445": {"file": "订单看板Agent.zip", "size": "292KB"},
+  "DID-0553E0AE-BBA4C2C4": {"file": "VIP经营Agent.zip", "size": "503KB"},
+  "DID-06E2BB38-171EB620": {"file": "汇率对冲Agent.zip", "size": "423KB"},
+  "DID-09F9A156-DE126983": {"file": "团队OKR-Agent.zip", "size": "426KB"},
+  "DID-0A2C17F1-A9FCC213": {"file": "报价单Agent.zip", "size": "252KB"},
+  "DID-0AB0AE95-6DEF917D": {"file": "多语言本地化Agent.zip", "size": "298KB"},
+  "DID-10425E76-1B4CE7FD": {"file": "展会策划Agent.zip", "size": "433KB"},
+  "DID-15CCAD9B-CEDF3102": {"file": "谈判教练Agent.zip", "size": "344KB"},
+  "DID-1D64AA4D-A9CAEC02": {"file": "复购唤醒Agent.zip", "size": "398KB"},
+  "DID-1DAB0FA6-1DCC1E69": {"file": "战略路线图Agent.zip", "size": "339KB"},
+  "DID-1E12068E-3BD52487": {"file": "社媒矩阵Agent.zip", "size": "453KB"},
+  "DID-213265D6-EB0AF010": {"file": "合同PI审查Agent.zip", "size": "358KB"},
+  "DID-2D9DA406-20EA3D95": {"file": "Listing大师Agent.zip", "size": "127KB"},
+  "DID-37857006-0E62439F": {"file": "组织架构Agent.zip", "size": "283KB"},
+  "DID-37A2CBCB-9A9F39D5": {"file": "专利IP风控Agent.zip", "size": "399KB"},
+  "DID-3A0D49C6-B27E0BC5": {"file": "销量预测Agent.zip", "size": "351KB"},
+  "DID-3E0F6FB4-A783F37E": {"file": "报关单证Agent.zip", "size": "452KB"},
+  "DID-449E3F14-D7DB5130": {"file": "打样跟进Agent.zip", "size": "336KB"},
+  "DID-46E4D8A6-DC4E632B": {"file": "回复话术Agent.zip", "size": "314KB"},
+  "DID-471EB6DC-BC225B8A": {"file": "画像生成Agent.zip", "size": "368KB"},
+  "DID-50E9B31E-F047154C": {"file": "市场洞察Agent.zip", "size": "470KB"},
+  "DID-56ECD59D-B3D3A690": {"file": "客户分层Agent.zip", "size": "334KB"},
+  "DID-5B6B74AE-3E98D380": {"file": "经营仪表盘Agent.zip", "size": "395KB"},
+  "DID-5DD0D11B-67DCEA4E": {"file": "流失客户挽回Agent.zip", "size": "340KB"},
+  "DID-608349B6-8BB6ABE5": {"file": "EDM邮件Agent.zip", "size": "308KB"},
+  "DID-626CAA53-A0E68810": {"file": "生产排期Agent.zip", "size": "309KB"},
+  "DID-6B5D80D6-C614373F": {"file": "业务员业绩Agent.zip", "size": "317KB"},
+  "DID-6E8C4DE8-4E60DAD2": {"file": "站外引流Agent.zip", "size": "374KB"},
+  "DID-73FCE03E-12525E53": {"file": "P4P智投Agent.zip", "size": "327KB"},
+  "DID-76EB8806-4E2F9431": {"file": "岗位JD-Agent.zip", "size": "501KB"},
+  "DID-7C14389C-532D6B30": {"file": "目标国家Agent.zip", "size": "471KB"},
+  "DID-7DBB916F-AF9C081C": {"file": "案例见证Agent.zip", "size": "127KB"},
+  "DID-84607868-453B02DF": {"file": "业务诊断Agent.zip", "size": "556KB"},
+  "DID-88A7231C-D8B3FB4D": {"file": "质检验货Agent.zip", "size": "370KB"},
+  "DID-8B58BA1E-AE89E0C5": {"file": "物流方案Agent.zip", "size": "316KB"},
+  "DID-8E6EB61F-1BDBE268": {"file": "入职培养Agent.zip", "size": "330KB"},
+  "DID-91D91887-D29C279F": {"file": "AIGC视觉Agent.zip", "size": "407KB"},
+  "DID-946064E0-ACE96A28": {"file": "品牌出海路线图Agent.zip", "size": "336KB"},
+  "DID-984B0756-476F9280": {"file": "认证合规Agent.zip", "size": "370KB"},
+  "DID-99298CFD-837334B4": {"file": "关键词矩阵Agent.zip", "size": "387KB"},
+  "DID-9E24B1C0-3E726222": {"file": "客户背调Agent.zip", "size": "487KB"},
+  "DID-9EF8F7C2-A83530B8": {"file": "收款风控Agent.zip", "size": "388KB"},
+  "DID-9F1F1466-898B47FC": {"file": "供应商匹配Agent.zip", "size": "329KB"},
+  "DID-A5B45664-3A0D9523": {"file": "知识库Agent.zip", "size": "424KB"},
+  "DID-A89B1BA1-5D001DC8": {"file": "出口认证路线图Agent.zip", "size": "159KB"},
+  "DID-ACC52A6C-7DAB8E48": {"file": "视频脚本Agent.zip", "size": "331KB"},
+  "DID-AD435E2B-82A44ED4": {"file": "包装标签Agent.zip", "size": "436KB"},
+  "DID-B3D50A9D-0A9D51C7": {"file": "品牌定位Agent.zip", "size": "490KB"},
+  "DID-B5591E90-BC5C814D": {"file": "品牌资产库Agent.zip", "size": "264KB"},
+  "DID-B5C3B8E7-963F8927": {"file": "合规雷达Agent.zip", "size": "399KB"},
+  "DID-BB1D1622-9E09C025": {"file": "询盘分级Agent.zip", "size": "395KB"},
+  "DID-C05A5B91-00524CE8": {"file": "RFQ抢单Agent.zip", "size": "330KB"},
+  "DID-C0EABD5B-AA1784D4": {"file": "询盘巡检Agent.zip", "size": "471KB"},
+  "DID-C79D75F1-C45FF0AF": {"file": "出口退税Agent.zip", "size": "343KB"},
+  "DID-CCE08454-AB906A06": {"file": "信用贷信保理赔Agent.zip", "size": "328KB"},
+  "DID-D2CD0B11-E0ACAC8A": {"file": "利润测算Agent.zip", "size": "332KB"},
+  "DID-D41CB43F-D07D1787": {"file": "客诉处理Agent.zip", "size": "505KB"},
+  "DID-D464A3-73D464A3U1781698-9627-82D65F": {"file": "国际站生意助手.zip", "size": "18KB"},
+  "DID-DDF62985-238D1F13": {"file": "样品转单Agent.zip", "size": "155KB"},
+  "DID-DE9D0C5B-8085AB7C": {"file": "BOSS直聘招聘Agent.zip", "size": "364KB"},
+  "DID-DFD34AC2-5108F56A": {"file": "决策人识别Agent.zip", "size": "374KB"},
+  "DID-DFE3021C-BB817D26": {"file": "竞品扫描Agent.zip", "size": "408KB"},
+  "DID-F3AA112D-DEC4CCE9": {"file": "商标知产保护Agent.zip", "size": "526KB"},
+  "DID-F568CC77-BD53FBBA": {"file": "利润分析Agent.zip", "size": "363KB"},
+  "DID-F9B4B2E0-6E83DC8C": {"file": "趋势选品Agent.zip", "size": "313KB"},
+  "MID-CN-S01-SOCIAL-MEDIA": {"file": "社媒运营文案专家.zip", "size": "83KB"},
+  "MID-DTC-S01-STORE-OPS": {"file": "独立站运营专家.zip", "size": "373KB"},
+  "MID-NEWBIZ-S01-PRODUCT-SELECT": {"file": "新商选品美工.zip", "size": "327KB"},
+  "MID-NEWBIZ-S02-SUPPLIER": {"file": "新商供应链落地.zip", "size": "93KB"},
+  "MID-NEWBIZ-S03-LISTING": {"file": "新商主图详情页.zip", "size": "331KB"},
+  "MID-NEWBIZ-S04-BUYER-CHECK": {"file": "新商买家背调.zip", "size": "413KB"},
+  "MID-NEWBIZ-S05-INQUIRY-DIAG": {"file": "新商询盘诊断.zip", "size": "315KB"},
+  "MID-NEWBIZ-S06-OPS-PATROL": {"file": "新商运营巡逻.zip", "size": "145KB"},
+};
+
 // ===================== 分类图标映射 =====================
 const CAT_ICONS = {
   "发品上架":"📦","经营管理":"📊","订单物流":"🚚","客户管理":"👥","财务风控":"💰",
@@ -471,6 +557,7 @@ function render() {
     const pct = score ? Math.round((score / maxScore) * 100) : 0;
     const isSelected = selectedAgent && selectedAgent.id === a.id;
     const kws = a.keywords.slice(0, 4).map(k => `<span class="kw-tag">${k}</span>`).join('');
+    const pkg = AGENT_PACKAGES[a.id];
     const scoreHtml = score > 0 ? `<span class="match-score" style="background:#eff6ff;color:#2563eb;">${pct >= 80 ? '⭐ 强匹配' : pct >= 50 ? '推荐' : '相关'}</span>` : '';
     return `<div class="agent-card${isSelected ? ' selected' : ''}" onclick="selectAgent('${a.id}')">
       ${scoreHtml}
@@ -485,7 +572,7 @@ function render() {
       <div class="card-keywords">${kws}</div>
       <div class="card-actions">
         <button class="btn-sm btn-primary" onclick="event.stopPropagation();viewDetail('${a.id}')">查看详情 & 提示词</button>
-        <button class="btn-sm btn-outline" onclick="event.stopPropagation();deployGuide('${a.id}')">部署指引</button>
+        <a class="btn-sm btn-dl" href="agent-packages/${pkg ? pkg.file : ''}" download onclick="event.stopPropagation()">⬇️ 下载 ${pkg ? pkg.size : ''}</a>
       </div>
     </div>`;
   }).join('');
@@ -512,6 +599,9 @@ function viewDetail(id) {
   document.getElementById('drawerCatBadge').innerHTML = `<span class="cat-badge cat-${a.category}" style="font-size:11px;padding:2px 8px;border-radius:10px;">${CAT_ICONS[a.category]||''} ${a.category}</span>`;
 
   const systemPrompt = buildSystemPrompt(a);
+  const pkg = AGENT_PACKAGES[a.id];
+  const pkgFile = pkg ? pkg.file : '';
+  const pkgSize = pkg ? pkg.size : '';
   const body = document.getElementById('drawerBody');
   body.innerHTML = `
     <div class="section-label">智能体简介</div>
@@ -529,15 +619,21 @@ function viewDetail(id) {
     <div class="kw-list">${a.keywords.map(k => `<span class="kw-full">${k}</span>`).join('')}</div>
 
     <div class="deploy-section">
-      <div class="deploy-title">🚀 一键部署到 Accio 客户端</div>
+      <div class="deploy-title">🚀 部署「${a.name}」到 Accio 客户端</div>
       <div class="deploy-steps">
-        <b>步骤1：</b>下载 <code>waidi-agent-kit.zip</code>（同目录）<br>
-        <b>步骤2：</b>解压后在终端执行：<br>
-        <code style="display:block;margin:6px 0;padding:6px;background:rgba(0,0,0,.08);border-radius:4px;">bash waidi-agent-kit/deploy.sh</code>
+        <b>步骤1：</b>下载此智能体专属部署包<br>
+        <a class="download-link-btn" href="agent-packages/${pkgFile}" download="${pkgFile}">
+          ⬇️ 下载 ${a.name}（${pkgSize}）
+        </a>
+        <br><b>步骤2：</b>解压后在终端执行：<br>
+        <code style="display:block;margin:6px 0;padding:6px;background:rgba(0,0,0,.08);border-radius:4px;">bash ${pkgFile.replace('.zip','')}/deploy.sh</code>
         <b>步骤3：</b>部署完成后重启 Accio 客户端<br>
         <b>步骤4：</b>在智能体列表找到「${a.name}」即可使用
       </div>
-      <button class="deploy-btn" onclick="showDeployDetail('${a.id}')">📋 查看该智能体部署命令</button>
+      <div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);font-size:12px;color:var(--text3);">
+        💡 需要全部75个智能体？
+        <a href="waidi-agent-kit.zip" download="waidi-agent-kit.zip" style="color:var(--accent);text-decoration:none;font-weight:500;">下载完整包（25.6MB）</a>
+      </div>
     </div>
   `;
   render();
