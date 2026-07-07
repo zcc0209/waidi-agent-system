@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>外贸AI智能体系统</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f5f6f8;
+  --card: #ffffff;
+  --border: #e4e7ed;
+  --text: #1a1a2e;
+  --text2: #555770;
+  --text3: #8890a4;
+  --accent: #2563eb;
+  --accent-light: #eff6ff;
+  --accent-border: #bfdbfe;
+  --green: #16a34a; --green-bg: #f0fdf4; --green-b: #bbf7d0;
+  --orange: #ea580c; --orange-bg: #fff7ed; --orange-b: #fed7aa;
+  --purple: #7c3aed; --purple-bg: #f5f3ff; --purple-b: #ddd6fe;
+  --red: #dc2626; --red-bg: #fef2f2; --red-b: #fecaca;
+  --teal: #0891b2; --teal-bg: #ecfeff; --teal-b: #a5f3fc;
+  --pink: #db2777; --pink-bg: #fdf2f8; --pink-b: #fbcfe8;
+  --yellow: #ca8a04; --yellow-bg: #fefce8; --yellow-b: #fde68a;
+  --gray: #374151; --gray-bg: #f9fafb; --gray-b: #e5e7eb;
+}
+body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* 顶部导航 */
+.navbar { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+.nav-logo { font-size: 16px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; }
+.nav-logo span { background: var(--accent); color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-weight: 500; }
+.nav-stats { font-size: 12px; color: var(--text3); display: flex; gap: 16px; }
+.nav-stats b { color: var(--accent); }
+
+/* 主布局 */
+.layout { display: flex; height: calc(100vh - 56px); }
+
+/* 左侧边栏 */
+.sidebar { width: 220px; flex-shrink: 0; background: var(--card); border-right: 1px solid var(--border); overflow-y: auto; padding: 12px 0; }
+.sidebar-title { font-size: 11px; font-weight: 500; color: var(--text3); padding: 8px 16px 4px; letter-spacing: .5px; text-transform: uppercase; }
+.cat-item { display: flex; align-items: center; justify-content: space-between; padding: 7px 16px; font-size: 13px; color: var(--text2); cursor: pointer; border-radius: 0; transition: all .15s; }
+.cat-item:hover { background: var(--bg); color: var(--text); }
+.cat-item.active { background: var(--accent-light); color: var(--accent); font-weight: 500; border-right: 2px solid var(--accent); }
+.cat-count { font-size: 11px; background: var(--bg); color: var(--text3); padding: 1px 6px; border-radius: 10px; }
+.cat-item.active .cat-count { background: var(--accent-border); color: var(--accent); }
+
+/* 主内容区 */
+.main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+
+/* 搜索区 */
+.search-zone { background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%); padding: 28px 28px 24px; color: #fff; }
+.search-zone h1 { font-size: 20px; font-weight: 600; margin-bottom: 6px; }
+.search-zone p { font-size: 13px; opacity: .8; margin-bottom: 16px; }
+.search-row { display: flex; gap: 10px; }
+.search-input { flex: 1; padding: 10px 16px; border-radius: 8px; border: none; font-size: 14px; outline: none; background: rgba(255,255,255,.95); color: var(--text); }
+.search-input::placeholder { color: var(--text3); }
+.search-btn { padding: 10px 20px; background: #fff; color: var(--accent); border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; white-space: nowrap; transition: all .15s; }
+.search-btn:hover { background: var(--accent); color: #fff; }
+.quick-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.qtag { font-size: 12px; padding: 3px 10px; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); border-radius: 12px; cursor: pointer; color: #fff; transition: all .15s; }
+.qtag:hover { background: rgba(255,255,255,.3); }
+
+/* 内容面板 */
+.content-panel { flex: 1; padding: 20px 24px; }
+
+/* 匹配结果 */
+.result-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.result-header h2 { font-size: 15px; font-weight: 600; color: var(--text); }
+.result-count { font-size: 12px; color: var(--text3); }
+
+/* 智能体卡片网格 */
+.agents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+
+/* 单个智能体卡片 */
+.agent-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; cursor: pointer; transition: all .2s; position: relative; }
+.agent-card:hover { border-color: var(--accent-border); box-shadow: 0 4px 12px rgba(37,99,235,.1); transform: translateY(-1px); }
+.agent-card.selected { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
+.card-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+.card-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.card-info { flex: 1; min-width: 0; }
+.card-name { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-cat { display: inline-flex; align-items: center; }
+.cat-badge { font-size: 11px; padding: 1px 7px; border-radius: 10px; font-weight: 500; }
+.card-desc { font-size: 12px; color: var(--text2); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 10px; }
+.card-keywords { display: flex; flex-wrap: wrap; gap: 4px; }
+.kw-tag { font-size: 11px; padding: 2px 7px; background: var(--bg); color: var(--text3); border-radius: 10px; }
+.card-actions { display: flex; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+.btn-sm { flex: 1; padding: 6px 10px; font-size: 12px; border-radius: 6px; border: 1px solid; cursor: pointer; font-weight: 500; transition: all .15s; text-align: center; }
+.btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-primary:hover { background: #1d4ed8; }
+.btn-outline { background: transparent; color: var(--text2); border-color: var(--border); }
+.btn-outline:hover { background: var(--bg); color: var(--text); }
+.match-score { position: absolute; top: 12px; right: 12px; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; }
+
+/* 右侧详情抽屉 */
+.drawer { width: 420px; flex-shrink: 0; background: var(--card); border-left: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; }
+.drawer.hidden { display: none; }
+.drawer-header { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--card); z-index: 10; }
+.drawer-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+.drawer-close { position: absolute; top: 16px; right: 16px; width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border); background: none; cursor: pointer; font-size: 16px; color: var(--text3); display: flex; align-items: center; justify-content: center; }
+.drawer-close:hover { background: var(--bg); }
+.drawer-body { padding: 20px; flex: 1; }
+.section-label { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; margin-top: 20px; }
+.section-label:first-child { margin-top: 0; }
+.desc-box { font-size: 13px; color: var(--text2); line-height: 1.7; background: var(--bg); padding: 12px 14px; border-radius: 8px; }
+.opener-box { font-size: 13px; color: var(--text); line-height: 1.7; background: var(--green-bg); border: 1px solid var(--green-b); padding: 12px 14px; border-radius: 8px; position: relative; }
+.prompt-box { font-size: 12px; color: var(--text2); line-height: 1.7; background: #1e293b; color: #e2e8f0; padding: 14px; border-radius: 8px; font-family: 'Courier New', monospace; white-space: pre-wrap; word-break: break-all; }
+.copy-btn { display: block; width: 100%; margin-top: 8px; padding: 7px; background: var(--accent-light); color: var(--accent); border: 1px solid var(--accent-border); border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 500; transition: all .15s; }
+.copy-btn:hover { background: var(--accent); color: #fff; }
+.copy-btn.copied { background: var(--green-bg); color: var(--green); border-color: var(--green-b); }
+.deploy-section { background: var(--orange-bg); border: 1px solid var(--orange-b); border-radius: 10px; padding: 16px; margin-top: 20px; }
+.deploy-title { font-size: 13px; font-weight: 600; color: var(--orange); margin-bottom: 8px; }
+.deploy-steps { font-size: 12px; color: var(--text2); line-height: 1.8; }
+.deploy-steps code { background: rgba(0,0,0,.06); padding: 1px 5px; border-radius: 4px; font-family: monospace; font-size: 11px; }
+.deploy-btn { display: block; width: 100%; margin-top: 12px; padding: 9px; background: var(--orange); color: #fff; border: none; border-radius: 7px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s; }
+.deploy-btn:hover { background: #c2410c; }
+.kw-list { display: flex; flex-wrap: wrap; gap: 5px; }
+.kw-full { font-size: 12px; padding: 3px 10px; background: var(--bg); color: var(--text2); border-radius: 10px; border: 1px solid var(--border); }
+
+/* 空状态 */
+.empty-state { text-align: center; padding: 60px 20px; color: var(--text3); }
+.empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+.empty-state p { font-size: 14px; }
+
+/* 类别颜色映射 */
+.cat-发品上架 { background: var(--accent-light); color: var(--accent); }
+.cat-经营管理 { background: var(--purple-bg); color: var(--purple); }
+.cat-订单物流 { background: var(--teal-bg); color: var(--teal); }
+.cat-客户管理 { background: var(--green-bg); color: var(--green); }
+.cat-财务风控 { background: var(--red-bg); color: var(--red); }
+.cat-询盘成交 { background: var(--orange-bg); color: var(--orange); }
+.cat-营销获客 { background: var(--pink-bg); color: var(--pink); }
+.cat-战略规划 { background: var(--gray-bg); color: var(--gray); }
+.cat-合规风控 { background: var(--yellow-bg); color: var(--yellow); }
+.cat-供应链 { background: var(--teal-bg); color: var(--teal); }
+.cat-品牌营销 { background: var(--purple-bg); color: var(--purple); }
+.cat-综合助手 { background: var(--accent-light); color: var(--accent); }
+.cat-选品供应链 { background: var(--green-bg); color: var(--green); }
+.cat-独立站 { background: var(--orange-bg); color: var(--orange); }
+
+.icon-发品上架 { background: var(--accent-light); }
+.icon-经营管理 { background: var(--purple-bg); }
+.icon-订单物流 { background: var(--teal-bg); }
+.icon-客户管理 { background: var(--green-bg); }
+.icon-财务风控 { background: var(--red-bg); }
+.icon-询盘成交 { background: var(--orange-bg); }
+.icon-营销获客 { background: var(--pink-bg); }
+.icon-战略规划 { background: var(--gray-bg); }
+.icon-合规风控 { background: var(--yellow-bg); }
+.icon-供应链 { background: var(--teal-bg); }
+.icon-品牌营销 { background: var(--purple-bg); }
+.icon-综合助手 { background: var(--accent-light); }
+.icon-选品供应链 { background: var(--green-bg); }
+.icon-独立站 { background: var(--orange-bg); }
+
+/* 吐司 */
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 999; }
+.toast.show { opacity: 1; }
+
+/* 响应式 */
+@media (max-width: 900px) {
+  .sidebar { width: 180px; }
+  .drawer { width: 360px; }
+}
+@media (max-width: 700px) {
+  .sidebar { display: none; }
+  .drawer { width: 100%; position: fixed; top: 56px; right: 0; height: calc(100vh - 56px); z-index: 50; }
+}
+</style>
+</head>
+<body>
+
+<!-- 顶部导航 -->
+<div class="navbar">
+  <div class="nav-logo">
+    🤖 外贸AI智能体系统
+    <span>76个智能体</span>
+  </div>
+  <div class="nav-stats">
+    涵盖 <b>14</b> 大业务场景 &nbsp;|&nbsp; 输入需求秒级匹配 &nbsp;|&nbsp; 支持一键部署
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- 左侧分类导航 -->
+  <div class="sidebar">
+    <div class="sidebar-title">业务场景</div>
+    <div class="cat-item active" data-cat="全部" onclick="filterCat('全部', this)">
+      全部智能体 <span class="cat-count">76</span>
+    </div>
+    <div class="cat-item" data-cat="询盘成交" onclick="filterCat('询盘成交', this)">
+      💬 询盘成交 <span class="cat-count">8</span>
+    </div>
+    <div class="cat-item" data-cat="营销获客" onclick="filterCat('营销获客', this)">
+      📢 营销获客 <span class="cat-count">9</span>
+    </div>
+    <div class="cat-item" data-cat="客户管理" onclick="filterCat('客户管理', this)">
+      👥 客户管理 <span class="cat-count">8</span>
+    </div>
+    <div class="cat-item" data-cat="发品上架" onclick="filterCat('发品上架', this)">
+      📦 发品上架 <span class="cat-count">7</span>
+    </div>
+    <div class="cat-item" data-cat="财务风控" onclick="filterCat('财务风控', this)">
+      💰 财务风控 <span class="cat-count">7</span>
+    </div>
+    <div class="cat-item" data-cat="经营管理" onclick="filterCat('经营管理', this)">
+      📊 经营管理 <span class="cat-count">9</span>
+    </div>
+    <div class="cat-item" data-cat="战略规划" onclick="filterCat('战略规划', this)">
+      🎯 战略规划 <span class="cat-count">6</span>
+    </div>
+    <div class="cat-item" data-cat="合规风控" onclick="filterCat('合规风控', this)">
+      ⚖️ 合规风控 <span class="cat-count">6</span>
+    </div>
+    <div class="cat-item" data-cat="供应链" onclick="filterCat('供应链', this)">
+      🏭 供应链 <span class="cat-count">5</span>
+    </div>
+    <div class="cat-item" data-cat="订单物流" onclick="filterCat('订单物流', this)">
+      🚚 订单物流 <span class="cat-count">3</span>
+    </div>
+    <div class="cat-item" data-cat="品牌营销" onclick="filterCat('品牌营销', this)">
+      ✨ 品牌营销 <span class="cat-count">3</span>
+    </div>
+    <div class="cat-item" data-cat="选品供应链" onclick="filterCat('选品供应链', this)">
+      🔍 选品情报 <span class="cat-count">3</span>
+    </div>
+    <div class="cat-item" data-cat="独立站" onclick="filterCat('独立站', this)">
+      🌐 独立站 <span class="cat-count">1</span>
+    </div>
+    <div class="cat-item" data-cat="综合助手" onclick="filterCat('综合助手', this)">
+      🤖 综合助手 <span class="cat-count">1</span>
+    </div>
+  </div>
+
+  <!-- 主内容 -->
+  <div class="main">
+    <!-- 搜索区域 -->
+    <div class="search-zone">
+      <h1>外贸AI智能体匹配系统</h1>
+      <p>描述你的需求，秒级匹配最合适的智能体，获取提示词 + 一键部署指引</p>
+      <div class="search-row">
+        <input class="search-input" id="searchInput" placeholder="例如：帮我写询盘回复话术 / 我想找供应商 / 店铺流量差怎么办 / 客户砍价怎么谈..." 
+               oninput="onSearch(this.value)" onkeydown="if(event.key==='Enter')doSearch()">
+        <button class="search-btn" onclick="doSearch()">🔍 匹配智能体</button>
+      </div>
+      <div class="quick-tags">
+        <span class="qtag" onclick="quickSearch('询盘回复话术')">💬 询盘话术</span>
+        <span class="qtag" onclick="quickSearch('选品找货')">🔍 选品找货</span>
+        <span class="qtag" onclick="quickSearch('买家背调尽调')">🕵️ 买家背调</span>
+        <span class="qtag" onclick="quickSearch('店铺流量运营')">📈 运营诊断</span>
+        <span class="qtag" onclick="quickSearch('供应商工厂')">🏭 找供应商</span>
+        <span class="qtag" onclick="quickSearch('报价谈判')">💰 报价谈判</span>
+        <span class="qtag" onclick="quickSearch('认证合规')">⚖️ 认证合规</span>
+        <span class="qtag" onclick="quickSearch('独立站Shopify')">🌐 独立站</span>
+        <span class="qtag" onclick="quickSearch('TikTok社媒')">📱 社媒运营</span>
+        <span class="qtag" onclick="quickSearch('利润成本测算')">📊 利润测算</span>
+      </div>
+    </div>
+
+    <!-- 结果内容 -->
+    <div class="content-panel">
+      <div class="result-header">
+        <h2 id="resultTitle">全部智能体（76个）</h2>
+        <span class="result-count" id="resultCount"></span>
+      </div>
+      <div class="agents-grid" id="agentsGrid"></div>
+    </div>
+  </div>
+
+  <!-- 右侧详情抽屉 -->
+  <div class="drawer hidden" id="drawer">
+    <div class="drawer-header">
+      <div class="drawer-title" id="drawerName">智能体详情</div>
+      <div id="drawerCatBadge"></div>
+      <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    </div>
+    <div class="drawer-body" id="drawerBody"></div>
+  </div>
+
+</div>
+
+<!-- 吐司提示 -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===================== 知识库数据 =====================
+const AGENTS_DB = [
+  {"id":"DID-01EC9671-35C7EAD1","name":"店铺装修Agent","category":"发品上架","desc":"外贸店铺装修（阿里旺铺/Amazon Brand Store/Shopify独立站）。6大模块：Hero Banner+品类导航+主推爆款+About Us七段结构+客户证言+FAQ+CTA底部；行业视觉风格库（7大行业）；移动端12项适配检查；国别化视觉差异；旺铺10项诊断，把店铺从货架变成品牌展厅。","keywords":["店铺装修","旺铺","Banner","About Us","移动端","视觉","独立站建站"],"opener":"你好！我可以帮你优化店铺视觉设计，请告诉我你的店铺类型（阿里旺铺/Amazon/Shopify）和所在行业，我来给你输出一套完整的店铺装修方案。"},
+  {"id":"DID-03ABBF9D-C2B66B3A","name":"月度复盘Agent","category":"经营管理","desc":"外贸月度经营复盘（自动写月报）。5W2H结构+4P复盘法（Plan→Performed→Problem→Plan改进）；自动汇总经营数据，输出可发老板/管理层的标准月报+月会议程+行动项跟踪表+责任人+截止日期，把月底写报告从4小时压缩到30分钟。","keywords":["月报","复盘","月度总结","月会","行动计划"],"opener":"你好！我来帮你写月度经营复盘报告。请把本月的核心数据告诉我（询盘数、成交数、GMV、主要问题），我用5W2H+4P结构给你输出一份可以直接发给老板的月报。"},
+  {"id":"DID-04DA0953-72660445","name":"订单看板Agent","category":"订单物流","desc":"外贸订单全生命周期看板。7阶段红绿灯预警+延期清单+里程碑日历（未来7天每天必做事项）+4种客户告知话术+财务回款预测+诚实提醒。","keywords":["订单","看板","履约","延期","交期","红绿灯","回款"],"opener":"你好！我来帮你建立订单全生命周期看板。请告诉我你目前有哪些在手订单（或粘贴订单列表），我输出红绿灯预警+本周必做清单+客户告知话术。"},
+  {"id":"DID-0553E0AE-BBA4C2C4","name":"VIP经营Agent","category":"客户管理","desc":"外贸VIP客户经营体系（KA大客户管理）。钻石客户12项专属特权+全年9项标准触点日历+季度QBR议程模板+客户成功度量（NPS/CSAT/钱包占有率）+健康度仪表盘+5大危机预警信号，防止业务员离职带走大客户。","keywords":["VIP","大客户","KA","QBR","客户健康度","钻石客户"],"opener":"你好！我来帮你系统经营大客户。请告诉我你的Top客户名单和当前跟进频率，我给你输出KA经营日历+健康度仪表盘+危机预警信号识别。"},
+  {"id":"DID-06E2BB38-171EB620","name":"汇率对冲Agent","category":"财务风控","desc":"外贸汇率对冲与锁汇建议。主流货币走势研判+订单汇率敞口测算+5种对冲工具对比（远期结汇/期权/NDF/锁汇/币种切换）+银行报价比对+锁汇时机建议+毛利保护阈值。","keywords":["汇率","锁汇","对冲","外汇","汇损","远期","期权"],"opener":"你好！我来帮你管控汇率风险。请告诉我：①订单货币和金额 ②签单到预计收款的时间差 ③你目前的对冲方式，我给你算出汇率敞口和最优锁汇建议。"},
+  {"id":"DID-09F9A156-DE126983","name":"团队OKR Agent","category":"经营管理","desc":"外贸团队OKR季度对齐与跟踪。公司O→部门KO→个人KR三层拆解+SMART检查+跨部门依赖矩阵+每周Check-in+季末复盘评分，帮你把年度战略落到每周行动。","keywords":["OKR","目标管理","KPI","季度","Check-in","复盘"],"opener":"你好！我来帮你制定和跟踪团队OKR。请告诉我公司本季度最重要的目标是什么（1-3个），我帮你拆解成三层KR体系并建立周Check-in机制。"},
+  {"id":"DID-0A2C17F1-A9FCC213","name":"报价单Agent","category":"询盘成交","desc":"外贸阶梯报价单生成。按客户类型输出差异化报价策略：阶梯价表（MOQ×数量×价格）+INCOTERMS选择+付款方式+汇率锁定+运费测算+砍价预案+PDF可打印PI模板，让每份报价都是一套谈判剧本。","keywords":["报价","报价单","PI","阶梯价","MOQ","INCOTERMS","谈判"],"opener":"你好！我来帮你生成专业的阶梯报价单。请告诉我：①产品名称和规格 ②你的成本价 ③目标客户类型（小买手/批发商/品牌商），我输出含砍价预案的完整PI模板。"},
+  {"id":"DID-0AB0AE95-6DEF917D","name":"多语言本地化Agent","category":"发品上架","desc":"外贸多语言本地化（文化适配不是直译）。8语种（英/西/法/德/俄/阿/日/葡）文化适配翻译+本地化SEO关键词+度量衡/货币/电压转换+合规标签本地化+RTL排版指南+母语审核SOP。","keywords":["翻译","本地化","多语言","德语","西语","法语","阿语","日语"],"opener":"你好！我来帮你做产品多语言本地化。请告诉我：①需要翻译的语种 ②产品类型 ③目标市场，我输出文化适配版本（不是直译）+本地化SEO关键词+合规标签。"},
+  {"id":"DID-10425E76-1B4CE7FD","name":"展会策划Agent","category":"营销获客","desc":"外贸展会策划与客户管理全流程。选展评分矩阵（ROI预测）+展位设计6要素+预算分配公式+客户邀约模板（展前8周）+展中5分钟快速判客SOP+名片分级（A/B/C/D）+展后黄金48h跟进序列+ROI计算。","keywords":["展会","广交会","展位","邀约","名片","判客","展后跟进"],"opener":"你好！我来帮你策划展会全流程。请告诉我：①参加哪个展会 ②展会时间 ③你的展位面积和预算，我输出展前邀约模板+展中判客SOP+展后跟进序列。"},
+  {"id":"DID-15CCAD9B-CEDF3102","name":"谈判教练Agent","category":"询盘成交","desc":"外贸谈判实战教练。粘贴客户邮件（砍价/比价/要账期/拖延），输出：客户意图判读+心理画像+谈判筹码+3档应对策略（强势/中性/让步）+风险预警+下一步话术。","keywords":["谈判","砍价","还价","邮件回复","谈判策略","成交"],"opener":"你好！请把客户的邮件或消息内容粘贴给我，我来帮你判读对方意图、识别筹码，给你3档回复策略（强势/中性/让步）和可直接发出的话术。"},
+  {"id":"DID-1D64AA4D-A9CAEC02","name":"复购唤醒Agent","category":"客户管理","desc":"外贸老客户复购周期管理与主动唤醒。按产品消耗周期×客户用量×行业季节性精准预测复购窗口，提前30/15/0天三波触达，8类话术库（补单/换季/新品/涨价预警/独家/促销/年终/续约）。","keywords":["复购","老客户","唤醒","补单","复购率","续约","流失预防"],"opener":"你好！我来帮你唤醒沉睡老客户。请告诉我：①客户名单或上次下单时间 ②产品消耗周期 ③有没有新品或促销，我给你输出三波触达节奏+8类话术模板。"},
+  {"id":"DID-1DAB0FA6-1DCC1E69","name":"战略路线图Agent","category":"战略规划","desc":"外贸战略路线图（12/24/36个月里程碑）。整合业务诊断+市场洞察+目标国家+品牌定位，输出三阶段路线图+阶段KPI+资源配置+关键决策门（Go/No-Go）+风险对冲+退出条件，是本批智能体的总指挥。","keywords":["战略","路线图","里程碑","规划","长期","KPI","资源配置"],"opener":"你好！我来帮你制定外贸战略路线图。请告诉我：①公司现阶段规模（GMV/人数）②主营品类 ③1年内最重要的战略目标，我输出12/24/36个月分阶段路线图+KPI设置。"},
+  {"id":"DID-1E12068E-3BD52487","name":"社媒矩阵Agent","category":"营销获客","desc":"外贸社媒矩阵运营（YouTube/TikTok/Instagram/LinkedIn/Pinterest/Facebook）。6平台差异化内容策略+一稿多发改编规则+月度内容日历+算法核心逻辑+账号冷启动SOP（0→1000粉30天）+数据监测指标体系。","keywords":["社媒","YouTube","TikTok","Instagram","LinkedIn","Pinterest","内容营销","海外社媒"],"opener":"你好！我来帮你规划海外社媒矩阵运营。请告诉我：①主营品类 ②目标市场 ③现有团队人力（有没有专职运营），我给你输出6平台内容策略+月度发布日历+账号冷启动SOP。"},
+  {"id":"DID-213265D6-EB0AF010","name":"合同PI审查Agent","category":"财务风控","desc":"外贸合同/PI/PO智能起草与风险扫描。输出标准PI模板或对现有合同做红黄绿三级风险扫描：付款方式陷阱+INCOTERMS错配+不可抗力条款+违约责任+知识产权+争议解决条款，每项风险给出修改建议文本。","keywords":["合同","PI","PO","合同审查","法律风险","INCOTERMS","仲裁"],"opener":"你好！请把你的合同或PI文件内容粘贴给我，我来做红黄绿三级风险扫描，找出付款陷阱、INCOTERMS错配、违约责任漏洞，并直接给出修改文本。"},
+  {"id":"DID-2D9DA406-20EA3D95","name":"Listing大师Agent","category":"发品上架","desc":"外贸单品Listing全套生成（阿里/Amazon/独立站通用）。3平台标准Listing：SEO标题+6主图脚本+5 Bullet Points+Description+Backend Keywords+国别化关键词+A+ Content结构+详情页7屏联动，一个产品一套完整上架物料，3平台通吃。","keywords":["Listing","Amazon","SEO标题","Bullet","关键词","上架","A+"],"opener":"你好！我来帮你生成完整的产品Listing。请告诉我：①产品名称和核心卖点 ②目标平台（阿里/Amazon/独立站）③目标市场，我输出SEO标题+Bullet Points+关键词+详情页结构。"},
+  {"id":"DID-37857006-0E62439F","name":"组织架构Agent","category":"经营管理","desc":"外贸公司组织架构设计。按5阶段规模×4业务模式输出3套架构方案（保守/推荐/激进）+前中后台划分+管理半径检查+5大误区诊断+阶段升级路线图，帮老板从一线管理中解放出来。","keywords":["组织架构","团队搭建","人员规划","管理","招聘","架构"],"opener":"你好！我来帮你设计外贸团队架构。请告诉我：①现有人员规模 ②业务模式（贸易/工厂/品牌商）③当前最大的管理痛点，我给你3套架构方案（保守/推荐/激进）。"},
+  {"id":"DID-37A2CBCB-9A9F39D5","name":"专利IP风控Agent","category":"合规风控","desc":"外贸专利与知识产权风控（侵权规避）。3大专利类型×5大市场（US/EU/UK/DE/JP）检索+FTO分析+规避设计建议+337调查应对SOP+侵权成本量化+Kill List（高侵权风险产品）。","keywords":["专利","知识产权","FTO","侵权","337","IP","专利检索"],"opener":"你好！我来帮你做专利侵权风险排查。请告诉我：①产品名称和品类 ②目标销售市场（美/欧/英/德/日）③产品的核心外观或功能特征，我给你FTO分析+规避设计建议+风险等级评定。"},
+  {"id":"DID-3A0D49C6-B27E0BC5","name":"销量预测Agent","category":"经营管理","desc":"外贸销量预测与备货预警。四模型加权预测（历史趋势×季节性×客户预订×宏观因子）未来3/6/12个月销量；输出3档预测（保守/中性/乐观）+备货建议+库存预警+产能预警+现金流预测。","keywords":["销量预测","备货","库存","产能","季节性","现金流"],"opener":"你好！我来帮你做销量预测和备货规划。请告诉我：①历史销量数据（近6-12个月）②主要客户预订情况 ③旺季时间点，我输出3档预测（保守/中性/乐观）+精确到SKU的备货建议。"},
+  {"id":"DID-3E0F6FB4-A783F37E","name":"报关单证Agent","category":"订单物流","desc":"外贸报关单证智能起草与审核。覆盖商业发票18字段、装箱单、提单、原产地证（RCEP/Form A/Form E等）起草模板；L/C单证一致性逐字段扫描（20+检查项）+不符点定位+修改文本+目的国特殊单证清单。","keywords":["报关","单证","信用证","L/C","提单","装箱单","原产地证","RCEP"],"opener":"你好！我来帮你处理报关单证。请告诉我：①货物品名和HS Code ②贸易条款（FOB/CIF等）③目的国 ④是否有信用证，我帮你起草单证模板或做L/C单证一致性审核。"},
+  {"id":"DID-449E3F14-D7DB5130","name":"打样跟进Agent","category":"供应链","desc":"外贸打样跟进与样品转化（供应链端）。8阶段全链路（需求确认→工厂打样→内部QC→寄出→在途→到达→客户反馈→决策催单）+物流方式选择+费用分摊话术+客户反馈10类状态分类+催单节奏表。","keywords":["打样","样品","跟单","打样跟进","样品寄送","QC"],"opener":"你好！我来帮你管理打样跟进流程。请告诉我：①打样的产品和规格 ②样品当前所处阶段 ③客户预计收到时间，我给你阶段性跟进节奏+话术+样品ROI分析。"},
+  {"id":"DID-46E4D8A6-DC4E632B","name":"回复话术Agent","category":"询盘成交","desc":"外贸询盘四阶段话术生成器。告诉我客户类型和当前阶段（首封/跟进/催单/挽回），生成3个版本的去AI化、去模板腔邮件话术，让买家感受到你是真人在认真对待他们。","keywords":["话术","邮件","首封","跟进","催单","挽回","回复模板"],"opener":"你好！我来帮你写询盘回复话术。请告诉我：①客户类型（小卖/批发商/品牌商）②当前阶段（首封/跟进/催单/挽回）③客户的具体问题或顾虑，我给你3个版本的去AI化回复。"},
+  {"id":"DID-471EB6DC-BC225B8A","name":"画像生成Agent","category":"客户管理","desc":"反推外贸店铺理想买家画像（ICP）。上传历史成交客户数据，输出5-8个精准买家画像+明确的放弃清单（Kill List），帮你搞清楚该接谁、该放弃谁，符合海坛9-sheet标准格式。","keywords":["ICP","买家画像","客户画像","Kill List","理想客户","数据分析"],"opener":"你好！我来帮你分析理想买家画像（ICP）。请上传或粘贴你的历史成交客户数据（公司名/国家/订单金额/行业），我输出5-8个精准买家画像+应该放弃的Kill List。"},
+  {"id":"DID-50E9B31E-F047154C","name":"市场洞察Agent","category":"战略规划","desc":"外贸市场洞察雷达（深度版）。6维市场报告：市场规模与CAGR+季节性曲线+关税合规雷达+需求驱动力+价格带演变+消费者偏好迁移；Top 5市场对比+GO/HOLD/KILL决策卡+3档进入方案。","keywords":["市场洞察","市场分析","CAGR","关税","价格带","市场进入"],"opener":"你好！我来帮你做目标市场深度分析。请告诉我：①产品品类 ②打算进入哪些市场 ③目前最大的市场进入疑虑，我输出6维市场报告+GO/HOLD/KILL决策卡。"},
+  {"id":"DID-56ECD59D-B3D3A690","name":"客户分层Agent","category":"客户管理","desc":"外贸客户四维分层体系（售后与复购地基）。RFM×战略价值×生命周期×利润贡献四维模型，输出钻石/黄金/白银/青铜/休眠/Kill六层客户金字塔+各层经营策略+资源分配公式+升降级预警。","keywords":["客户分层","RFM","客户价值","分级","优先级","复购"],"opener":"你好！我来帮你建立客户分层体系。请告诉我：①你现有的客户列表（或导入数据）②每个客户的下单频率和金额 ③哪些客户让你最头疼，我输出6层客户金字塔+各层经营策略。"},
+  {"id":"DID-5B6B74AE-3E98D380","name":"经营仪表盘Agent","category":"经营管理","desc":"外贸老板经营仪表盘（数据驾驶舱）。北极星指标+6大经营维度（流量/转化/订单/利润/客户/履约）12个核心指标+红黄绿警示+周/月/季同比环比+自动诊断5大异常+行动建议清单；输出可视化HTML看板。","keywords":["仪表盘","经营数据","看板","数据分析","KPI","诊断","老板汇报"],"opener":"你好！我来帮你搭建外贸经营仪表盘。请告诉我你想监控哪些核心指标（流量/询盘/转化/GMV/利润/客户），我给你输出可视化HTML仪表盘+红黄绿预警阈值。"},
+  {"id":"DID-5DD0D11B-67DCEA4E","name":"流失客户挽回Agent","category":"客户管理","desc":"外贸流失客户智能挽回。三维聚类（流失时长×客户价值×流失原因）输出挽回名单优先级+4种挽回策略（调研型/利益型/关系型/刺激型）+6阶段触达节奏+8套话术模板+挽回ROI预测+Kill List。","keywords":["流失","挽回","唤醒","沉睡客户","失联","流失原因"],"opener":"你好！我来帮你挽回流失客户。请告诉我：①哪些客户多久没下单了 ②他们流失的可能原因 ③你们的历史合作情况，我给你输出挽回优先级排序+定制话术。"},
+  {"id":"DID-608349B6-8BB6ABE5","name":"EDM邮件Agent","category":"营销获客","desc":"外贸EDM邮件营销（B2B询盘培育+B2C通用）。5客户群分层×5阶段邮件序列×ABC三版模板+主题行10公式库+国别化发送时间矩阵+送达率优化（SPF/DKIM/DMARC）+反垃圾15项Checklist+合规差异（GDPR/CAN-SPAM）。","keywords":["EDM","邮件营销","邮件序列","Klaviyo","开信率","垃圾邮件","GDPR"],"opener":"你好！我来帮你规划EDM邮件营销。请告诉我：①目标客户群 ②邮件发送目的（获客/培育/促单/复购）③已有邮件列表规模，我给你输出5阶段邮件序列+主题行公式+发送时间矩阵。"},
+  {"id":"DID-626CAA53-A0E68810","name":"生产排期Agent","category":"供应链","desc":"工厂生产排期智能体。多因子优先级评分+产能负载模型（人/机/料/工时）+3套排程算法+插单冲击模拟（接vs不接财务对比）+瓶颈识别+加班/外协决策+甘特图，30秒看出未来60天哪天最紧张。","keywords":["生产排期","产能","排程","甘特图","插单","生产计划","工厂管理"],"opener":"你好！我来帮你做生产排期规划。请告诉我：①当前在手订单列表（产品/数量/交期）②产线产能情况 ③是否有新订单需要插单评估，我给你输出优先级排程+甘特图+瓶颈识别。"},
+  {"id":"DID-6B5D80D6-C614373F","name":"业务员业绩Agent","category":"经营管理","desc":"外贸业务员业绩诊断与排行。6维度业绩+8段销售漏斗+4类业务员画像（猎手/农夫/守门员/僵尸）；输出GMV+净利双榜排行+漏斗瓶颈定位+个人诊断报告+提成方案优化+培训计划+末位淘汰建议。","keywords":["业务员","业绩","销售漏斗","排行","提成","KPI","末位淘汰"],"opener":"你好！我来帮你诊断和提升业务员业绩。请告诉我：①业务员列表和各自的GMV数据 ②销售漏斗各环节数据（询盘/报价/成交）③目前最头疼的业务员问题，我给你输出业绩排行+诊断报告+改进建议。"},
+  {"id":"DID-6E8C4DE8-4E60DAD2","name":"站外引流Agent","category":"营销获客","desc":"外贸站外广告投放策略（Google/Meta/LinkedIn/TikTok）。4大平台差异化投放+国别化投放矩阵+3档预算方案+ROI/ROAS监控看板+再营销分层策略+着陆页转化优化。","keywords":["站外广告","Google广告","Meta广告","LinkedIn广告","TikTok广告","ROAS","ROI","投放"],"opener":"你好！我来帮你规划站外广告投放策略。请告诉我：①产品品类和客单价 ②目标市场 ③月广告预算 ④B2B还是B2C，我给你输出4平台投放方案+预算分配+ROI目标设定。"},
+  {"id":"DID-73FCE03E-12525E53","name":"P4P智投Agent","category":"营销获客","desc":"阿里国际站P4P直通车/智投托管优化。P4P+智投双模式诊断：日预算分配+关键词出价矩阵+ROI监控看板（CTR/CVR/CPC/ROI红绿灯）+自动调价规则+竞品广告反查。","keywords":["P4P","直通车","智投","阿里广告","关键词出价","CTR","CPC","ROI"],"opener":"你好！我来帮你优化阿里国际站P4P/智投投放。请告诉我：①当前P4P日预算 ②主推产品品类 ③最近30天ROI数据，我给你诊断关键词出价策略+调价规则+效果监控看板。"},
+  {"id":"DID-76EB8806-4E2F9431","name":"岗位JD Agent","category":"经营管理","desc":"外贸岗位JD与能力模型。覆盖12大外贸岗位×4层级（专员/主管/经理/总监）标准JD七大模块（任职资格/职责/能力模型/薪酬带宽/KPI/发展路径/面试题），薪酬带宽透明，输出招聘画像直接送招聘使用。","keywords":["JD","招聘","岗位说明书","薪酬","能力模型","面试题","人才"],"opener":"你好！我来帮你写外贸岗位招聘JD。请告诉我：①需要招聘的岗位名称 ②层级（专员/主管/经理）③核心考核指标是什么，我输出含薪酬带宽、能力模型、5道面试题的完整JD。"},
+  {"id":"DID-7C14389C-532D6B30","name":"目标国家Agent","category":"战略规划","desc":"外贸目标国家市场矩阵（深度版）。30国全景打分（10维100分制）+Top 10进入排序+不进入清单（Kill List）+买家结构+合规门槛+价格带+渠道偏好+3档进入方案，明确告诉你先打哪个国家、为什么。","keywords":["目标市场","国家选择","市场进入","国别","Kill List","市场矩阵"],"opener":"你好！我来帮你做目标国家市场选择。请告诉我：①你的产品品类 ②目前已有的销售市场 ③你的核心竞争优势，我给你30国打分矩阵+Top 10进入优先级+Kill List（不要进的国家）。"},
+  {"id":"DID-7DBB916F-AF9C081C","name":"案例见证Agent","category":"营销获客","desc":"外贸客户案例与见证素材库。STAR结构+5种素材类型（书面证言/数据案例/视频证言/UGC/行业奖项）+12类采集问题清单+4种成稿模板+客户授权协议+8渠道投放方案，让真实数据替代模板腔说话。","keywords":["案例","客户见证","证言","案例库","社会证明","信任背书"],"opener":"你好！我来帮你打造客户案例与见证素材。请告诉我：①有哪些代表性合作客户 ②有没有可量化的合作成果数据 ③要用在哪些渠道（阿里详情页/官网/社媒），我给你STAR结构案例+投放方案。"},
+  {"id":"DID-84607868-453B02DF","name":"业务诊断Agent","category":"战略规划","desc":"外贸生意全面诊断（战略层医生）。8大维度（市场定位/产品/流量/转化/客户/利润/团队/风险）+行业基准对照+卡点4象限定位+优先级整改清单+90天行动路径，找出真正卡住增长的根因。","keywords":["业务诊断","全面诊断","卡点","增长","整改","90天"],"opener":"你好！我来帮你做外贸业务全面诊断。请告诉我：①公司主营品类和规模 ②目前最大的增长瓶颈是什么 ③最近半年数据有什么异常，我从8个维度做诊断，给你90天优先整改清单。"},
+  {"id":"DID-88A7231C-D8B3FB4D","name":"质检验货Agent","category":"供应链","desc":"外贸AQL抽检方案与验货报告解读。基于ISO 2859-1自动生成AQL抽样表+5维度检验项目清单+第三方报告（SGS/BV/TUV）诊断解读+整改建议+3种结果客户话术（通过/部分整改/不通过），CR致命缺陷零容忍。","keywords":["质检","验货","AQL","SGS","BV","TUV","抽检","质量"],"opener":"你好！我来帮你规划质检验货方案。请告诉我：①产品品类和订单数量 ②目标市场的质量标准要求 ③是否已有第三方报告，我给你AQL抽样方案+检验清单+报告解读+整改建议。"},
+  {"id":"DID-8B58BA1E-AE89E0C5","name":"物流方案Agent","category":"订单物流","desc":"外贸物流方案智能比价。按目的国×货量×时效×预算输出5种方案对比（海运整柜/拼箱/空运/快递/海外仓），含体积重计算、目的港关税预测（含301加征/双反/VAT）、DDP全链路报价模板、清关风险预警、旺季舱位预警。","keywords":["物流","海运","空运","DDP","清关","关税","海外仓","物流比价"],"opener":"你好！我来帮你比选物流方案。请告诉我：①货物品名和重量/体积 ②目的国 ③时效要求 ④预算范围，我给你5种方案对比（含关税预测+DDP全链路报价）。"},
+  {"id":"DID-8E6EB61F-1BDBE268","name":"入职培养Agent","category":"经营管理","desc":"外贸新人入职30/60/90天培养计划。按4类岗位（业务员/跟单/运营/设计）输出90天逐周路线图+入职文档大礼包+师徒制配对方案（含奖金机制）+30/60/90三节点考核标准+5大流失预警信号+转正答辩SOP。","keywords":["入职","新人","培训","90天","师徒制","考核","转正"],"opener":"你好！我来帮你设计新人入职培养计划。请告诉我：①新员工的岗位 ②公司规模和现有培训体系 ③最常见的新人流失原因，我给你30/60/90天逐周路线图+考核节点+转正答辩SOP。"},
+  {"id":"DID-91D91887-D29C279F","name":"AIGC视觉Agent","category":"发品上架","desc":"外贸AIGC视觉素材生成（主图/Banner/活动图）。5种图片类型×行业风格库+Prompt工程模板库（白底/场景/Banner/节日/社媒）+平台尺寸规范速查+后期处理5步SOP+全年节日日历+3档预算方案。","keywords":["AIGC","AI生图","主图","Banner","Midjourney","Prompt","视觉素材"],"opener":"你好！我来帮你用AI生成产品视觉素材。请告诉我：①产品品类 ②需要什么类型的图（白底/场景/Banner/节日促销）③目标平台，我给你可直接用的Prompt模板+后期处理5步SOP。"},
+  {"id":"DID-946064E0-ACE96A28","name":"品牌出海路线图Agent","category":"战略规划","desc":"外贸商家品牌出海年度路线图（指挥棒）。按「贸易商→白牌→出海品牌→集团」4阶段输出阶段诊断+北极星升级指标+5年路线图+4大典型路径（Anker/SHEIN/Insta360/华为）+各阶段预算结构+5大升级坑预警。","keywords":["品牌出海","品牌升级","Anker","SHEIN","品牌路线图","白牌","DTC品牌"],"opener":"你好！我来帮你规划品牌出海路线图。请告诉我：①现在是贸易商还是白牌/工厂 ②年GMV规模 ③有没有品牌化的想法或初步尝试，我帮你判断阶段、规划5年路线图、预警5大升级坑。"},
+  {"id":"DID-984B0756-476F9280","name":"认证合规Agent","category":"合规风控","desc":"外贸产品认证合规（按目标国自动列清单）。5大市场30+认证标准矩阵（CE/FCC/RoHS/UL/FDA/REACH/UKCA/CB等）；强制vs推荐分类+费用/时间/机构推荐+不合规罚款量化+取证SOP+认证日历（维护/续证提醒）。","keywords":["认证","CE","FCC","RoHS","UL","FDA","REACH","UKCA","合规","认证费用"],"opener":"你好！我来帮你梳理产品出口认证要求。请告诉我：①产品品类 ②目标市场（美/欧/英/日/中东等），我自动列出强制认证清单+费用预估+时间安排+测试机构推荐。"},
+  {"id":"DID-99298CFD-837334B4","name":"关键词矩阵Agent","category":"发品上架","desc":"外贸关键词三梯队矩阵（问鼎/明星/长尾深度版）。3梯队×3平台（阿里/Amazon/Google）关键词池+出价区间+预算分配公式+季节波动日历+国别化关键词变体+竞品关键词反查。","keywords":["关键词","SEO","SEM","问鼎词","明星词","长尾词","关键词矩阵","Amazon SEO"],"opener":"你好！我来帮你建立关键词三梯队矩阵。请告诉我：①产品品类（中英文）②目标平台（阿里/Amazon/Google）③目标市场，我给你问鼎词+明星词+长尾词分层矩阵+出价策略+季节性日历。"},
+  {"id":"DID-9E24B1C0-3E726222","name":"客户背调Agent","category":"客户管理","desc":"外贸客户深度背调。提供买家邮箱/公司名/网站，自动抓取官网+LinkedIn+新闻，输出公司画像卡：业务模式、规模、估算采购量、关键决策人、合作匹配度、风险信号，大单签约前必备。","keywords":["背调","客户背调","尽调","公司背调","风险","LinkedIn","采购量"],"opener":"你好！我来帮你背调这个买家。请告诉我：公司名称、邮箱域名或官网地址，我自动抓取信息，输出公司画像卡（规模/采购量/决策人/风险信号）。"},
+  {"id":"DID-9EF8F7C2-A83530B8","name":"收款风控Agent","category":"财务风控","desc":"外贸收款风控与付款方式风险扫描。四维评估（客户国家×客户类型×订单金额×付款方式）输出红黄绿风险等级+5种主流收款方式风险对比（T/T/L/C/PayPal/Stripe/信保）+国家黑白名单+冻结/拒付/退单预警+催收话术+坏账止损流程。","keywords":["收款","T/T","L/C","PayPal","信保","拒付","坏账","风控","付款方式"],"opener":"你好！我来帮你评估收款风险。请告诉我：①客户国家 ②客户类型（新客/老客）③订单金额 ④对方提出的付款方式，我给你红黄绿风险评级+最优收款方案建议+风险规避措施。"},
+  {"id":"DID-9F1F1466-898B47FC","name":"供应商匹配Agent","category":"供应链","desc":"外贸供应商匹配与比价。4渠道搜索（1688/阿里国际站工厂版/Made-in-China/行业展会）；5维打分矩阵；漏斗筛选30家初筛→10家短名单→3家终选；价格比对表+MOQ协商话术+验厂前自检清单（12项）+Kill List（黑名单工厂特征）。","keywords":["供应商","工厂","1688","比价","验厂","MOQ","供应链","货源"],"opener":"你好！我来帮你找合适的供应商。请告诉我：①产品品类（中英文均可）②目标价位和MOQ要求 ③认证要求，我用4渠道搜索+5维打分给你30→10→3家漏斗筛选结果。"},
+  {"id":"DID-A5B45664-3A0D9523","name":"知识库Agent","category":"品牌营销","desc":"外贸企业知识库构建（AI Search优选）。7大模块：公司档案结构化+产品百科+FAQ 80-100个+案例库+Schema.org标记（JSON-LD）+阿里AI优选适配+ChatGPT/Perplexity引用优化；4周建设路线图；让买家搜索时AI主动推荐你而不是竞品。","keywords":["知识库","AI Search","SEO","FAQ","Schema","AI优选","品牌内容"],"opener":"你好！我来帮你搭建企业知识库（AI Search优化版）。请告诉我：①公司主营品类 ②目前有哪些素材（产品手册/案例/FAQ）③希望被哪些平台推荐（阿里AI优选/ChatGPT/Perplexity），我给你4周建设路线图+Schema标记模板。"},
+  {"id":"DID-A89B1BA1-5D001DC8","name":"出口认证路线图Agent","category":"合规风控","desc":"外贸出口产品认证路线图。输入产品品类+目标国，自动匹配30+主流认证（CE/UKCA/FCC/RoHS/FDA等）强制清单，推荐5梯队测试机构，输出申请SOP（费用/周期/材料）+不合规风险量化+续证日历。","keywords":["认证路线图","CE","FCC","FDA","测试机构","出口认证","认证SOP"],"opener":"你好！我来帮你规划出口认证路线图。请输入：产品品类 + 目标出口国，我自动匹配所有必须做的认证+推荐测试机构+申请SOP+费用周期表。"},
+  {"id":"DID-ACC52A6C-7DAB8E48","name":"视频脚本Agent","category":"营销获客","desc":"外贸产品视频脚本（30s/60s/90s分镜+配音）。5种视频类型（产品展示/工厂巡览/客户证言/TikTok短视频/品牌故事）×3时长分镜脚本表格+配音文案+拍摄清单+后期指令+各平台规格速查（阿里/Amazon/TikTok/YouTube/LinkedIn）。","keywords":["视频脚本","短视频","TikTok","分镜","配音","产品视频","工厂视频"],"opener":"你好！我来帮你写产品视频脚本。请告诉我：①产品品类和核心卖点 ②视频类型（产品展示/工厂巡览/客户证言/TikTok短视频/品牌故事）③视频时长，我给你逐秒分镜脚本+配音文案+拍摄清单。"},
+  {"id":"DID-AD435E2B-82A44ED4","name":"包装标签Agent","category":"合规风控","desc":"外贸包装/标签/唛头合规生成。按目标国法规（EU/US/UK/JP/IN/中东/拉美等）自动生成包装文案+唛头9字段+条码（EAN-13/UPC/ITF-14/QR）+多语言警示语+合规清单+设计稿合规扫描+常见违规预警。","keywords":["包装","标签","唛头","条码","EAN","UPC","合规包装","警示语"],"opener":"你好！我来帮你生成合规包装标签。请告诉我：①产品品类 ②目标市场（EU/US/UK/JP等）③是否已有包装设计稿，我输出包装文案+唛头内容+条码要求+多语言警示语+合规检查清单。"},
+  {"id":"DID-B3D50A9D-0A9D51C7","name":"品牌定位Agent","category":"品牌营销","desc":"外贸品牌定位（深度版）。22法则+Aaker三角推导品牌定位+差异化金字塔+Brand Story 7步结构+3版Slogan（保守/标准/激进）+Brand Voice 5维+视觉锤+防伪护城河+与Anker/SHEIN/Govee对照参考。","keywords":["品牌定位","Slogan","品牌故事","差异化","Brand Voice","视觉锤","品牌策略"],"opener":"你好！我来帮你做品牌定位。请告诉我：①产品品类和当前的竞争优势 ②目标客户画像 ③你希望品牌传达的核心价值，我用22法则+Aaker三角推导出品牌定位+3版Slogan+Brand Voice规范。"},
+  {"id":"DID-B5591E90-BC5C814D","name":"品牌资产库Agent","category":"品牌营销","desc":"外贸品牌资产统一管理。覆盖8大类资产（LOGO/VI/产品图/视频/文案/营销物料/版权/案例）+3级分级+强制命名规范+5大对象差异化分发SOP+5大盗用监测渠道+Brand Book 10模块，终结品牌素材混乱。","keywords":["品牌资产","LOGO","VI","Brand Book","素材管理","版权","品牌手册"],"opener":"你好！我来帮你建立品牌资产管理体系。请告诉我：①目前有哪些品牌素材（LOGO/VI/产品图/视频）②分发给哪些人（业务员/设计师/代理商）③有没有遇到素材混乱问题，我给你品牌资产分级体系+命名规范+Brand Book框架。"},
+  {"id":"DID-B5C3B8E7-963F8927","name":"合规雷达Agent","category":"合规风控","desc":"外贸全维合规红线监控（高危）。8大合规维度：GDPR数据隐私、SDN制裁名单三色筛查、反倾销/337调查应对、UFLPA强迫劳动审查、FCPA反贿赂——每客户开单必查，罚款量化到OFAC$100万/GDPR€2000万。","keywords":["合规","GDPR","SDN","制裁","反倾销","337","UFLPA","合规审查"],"opener":"你好！我来帮你做全维合规检查。请告诉我：①客户国家 ②客户公司名或邮箱 ③订单类型，我给你GDPR/SDN/反倾销/UFLPA多维合规扫描+风险等级+应对SOP。"},
+  {"id":"DID-BB1D1622-9E09C025","name":"询盘分级Agent","category":"询盘成交","desc":"阿里国际站询盘5级智能分级。粘贴询盘内容或截图，自动输出垃圾/小卖/批发/品牌/采购集团5级标签+置信度+优先级+建议动作，帮你在询盘海里快速排优先级。","keywords":["询盘分级","询盘质量","L0","L1","L2","L3","L4","优先级","阿里国际站"],"opener":"你好！请直接把询盘内容粘贴给我，我自动判断这是哪个级别的买家（L0垃圾→L4采购集团），给你置信度评分+优先级建议+对应的跟进动作。"},
+  {"id":"DID-C05A5B91-00524CE8","name":"RFQ抢单Agent","category":"询盘成交","desc":"阿里国际站RFQ抢单全流程。RFQ筛选10维评分+5级优先级（S/A/B/C/Kill）+黄金30分钟响应SOP+报价模板含钩子设计（价格锚点/样品诱饵/独家承诺）+RFQ数据复盘（周/月漏斗），把RFQ转化率从均值5%提到15%+。","keywords":["RFQ","抢单","报价","阿里国际站","30分钟","黄金响应","转化率"],"opener":"你好！我来帮你抢RFQ。请把RFQ内容粘贴给我，我给你10维评分+优先级判断（S/A/B/C/Kill）+30分钟内可发出的个性化报价模板+跟进节奏安排。"},
+  {"id":"DID-C0EABD5B-AA1784D4","name":"询盘巡检Agent","category":"询盘成交","desc":"阿里国际站后台询盘全面巡检（v1.1）。登录阿里后台，7维度分析近期询盘：响应速度、回复质量、跟进密度、转化漏斗、丢单原因、团队共性问题、重要客户漏网，输出Excel报告+业务员排行+诚实提醒。","keywords":["询盘巡检","阿里后台","响应速度","丢单","跟进","转化率","业务员"],"opener":"你好！我来帮你巡检询盘质量。请登录阿里后台或粘贴近期询盘记录，我从7个维度分析响应速度/回复质量/跟进密度/转化漏斗，输出Excel报告+业务员排行+高危丢单预警。"},
+  {"id":"DID-C79D75F1-C45FF0AF","name":"出口退税Agent","category":"财务风控","desc":"出口退税材料清单与进度跟踪。按HS Code自动查退税率+生成材料清单+申报流程SOP+退税进度跟踪+退税资金回笼预测+常见拒退原因（单证不符/归类错误/关联交易）+优化建议。","keywords":["退税","出口退税","HS Code","增值税","税率","退税流程"],"opener":"你好！我来帮你梳理出口退税流程。请告诉我：①产品HS Code ②出口目的国 ③月出口额大概多少，我给你退税率查询+材料清单+申报SOP+常见拒退原因+优化建议。"},
+  {"id":"DID-CCE08454-AB906A06","name":"信用贷信保理赔Agent","category":"财务风控","desc":"外贸信用贷与信保理赔全流程。信用贷产品对比（出口退税贷/订单贷/保单融资/阿里融资）+中信保/Coface额度申请SOP+理赔全流程（90天内报损必做事项+证据清单8项+追偿话术+拒赔申诉步骤）+信保保费优化。","keywords":["信保","信用保险","理赔","坏账","中信保","Coface","融资","保单"],"opener":"你好！我来帮你处理信保和融资问题。请告诉我：①是买家逾期付款需要理赔，还是需要贸易融资 ②金额和时间节点，我给你中信保理赔全流程+证据清单+融资产品对比。"},
+  {"id":"DID-D2CD0B11-E0ACAC8A","name":"利润测算Agent","category":"财务风控","desc":"外贸利润测算（到岸成本→净利全链路）。从FOB/EXW出发逐层叠加：8项直接成本+6项隐藏成本→到岸成本→终端售价反推净利；汇率敏感度模拟+盈亏平衡BEP+多国对比+Kill线+3档方案。","keywords":["利润测算","毛利","净利","成本核算","BEP","盈亏平衡","定价"],"opener":"你好！我来帮你做利润测算。请告诉我：①产品FOB价或EXW价 ②目标售价和销售平台 ③目的国 ④运费和关税情况，我给你14项成本全链路测算+净利率+盈亏平衡分析。"},
+  {"id":"DID-D41CB43F-D07D1787","name":"客诉处理Agent","category":"客户管理","desc":"外贸客诉处理与索赔全流程。5级客诉分级（L1一般→L5恶意）+5阶段SOP（识别/安抚/调查/方案/闭环）+3档赔付方案+阿里/Amazon/eBay/PayPal平台仲裁应对+差评回复模板+月度客诉复盘。","keywords":["客诉","投诉","索赔","差评","仲裁","赔付","客户投诉","退款"],"opener":"你好！我来帮你处理客户投诉。请把投诉内容告诉我（差评/索赔/退货），我给你5级分类+4h内响应话术+赔付方案+平台申诉指引+根因整改建议。"},
+  {"id":"DID-D464A3-73D464A3U1781698-9627-82D65F","name":"国际站生意助手","category":"综合助手","desc":"专为跨境卖家设计，选品、发品、素材生成到经营分析，一站式AI全链路支持。","keywords":["阿里国际站","综合助手","选品","发品","素材","经营分析"],"opener":"你好！我是阿里国际站一站式AI助手。请告诉我你现在需要什么帮助（选品/发品/素材/询盘/运营分析），我来为你提供全链路支持。"},
+  {"id":"DID-DDF62985-238D1F13","name":"样品转单Agent","category":"询盘成交","desc":"外贸样品订单转化跟踪与催单。5阶段跟进（样品到达→开箱→试用→反馈→决策→下单）+跟进时间表+各阶段话术+紧急清单（超期未转化名单）+转化漏斗+流失原因诊断+样品ROI分析，把样品管理从'发了等回音'变成主动推进。","keywords":["样品转单","样品跟进","催单","转化","样品ROI","跟进时间表"],"opener":"你好！我来帮你跟进样品转化。请告诉我：①样品发出时间和收货情况 ②客户目前的反馈状态 ③距离你期望成交还差哪一步，我给你精准跟进节奏+催单话术+样品ROI分析。"},
+  {"id":"DID-DE9D0C5B-8085AB7C","name":"BOSS直聘招聘Agent","category":"经营管理","desc":"BOSS直聘/智联/拉勾/猎聘/51job自动筛选候选人。按招聘画像10项评分模型自动打分排序，5-10套个性化话术轮换批量打招呼，单日≤80条节奏控制，漏斗看板（打招呼→回复→面试→入职），合规自检。","keywords":["招聘","BOSS直聘","简历筛选","候选人","打招呼","HR","面试"],"opener":"你好！我来帮你提效招聘流程。请告诉我：①在招职位 ②候选人的核心要求 ③现在卡在哪个环节（打招呼/筛简历/面试），我给你10维评分模型+5-10套个性化话术+合规自检清单。"},
+  {"id":"DID-DFD34AC2-5108F56A","name":"决策人识别Agent","category":"营销获客","desc":"找外贸客户公司真正的决策人。提供公司域名或公司名，自动定位Procurement Manager/CEO/Buyer等关键人，推测邮箱+标注置信度，并生成按职位定制的个性化开场白，帮你绕过前台直达拍板人。","keywords":["决策人","邮箱","采购经理","CEO","开场白","拓客","LinkedIn","找客户"],"opener":"你好！我来帮你找客户公司决策人。请提供：公司名称或域名（如examplecompany.com），我帮你定位Procurement/CEO/Buyer等关键人+推测邮箱（含置信度）+按职位定制的开场白。"},
+  {"id":"DID-DFE3021C-BB817D26","name":"竞品扫描Agent","category":"战略规划","desc":"外贸竞品扫描矩阵（三栈并行深度版）。三栈扫描（阿里国际站+Amazon+独立站D2C）30个竞品：竞品矩阵（定位/价格/卖点/差评/流量/护城河）+头部/腰部/长尾分层+差评聚类+反向定位机会。","keywords":["竞品","竞争分析","竞品扫描","Amazon","差评","定位","护城河"],"opener":"你好！我来帮你扫描竞争对手。请告诉我：①产品品类 ②你在哪些平台销售（阿里/Amazon/独立站）③最想了解哪些竞品（价格/卖点/差评），我给你30个竞品矩阵分析+差评聚类+反向定位机会。"},
+  {"id":"DID-F3AA112D-DEC4CCE9","name":"商标知产保护Agent","category":"合规风控","desc":"外贸商标与知识产权全球保护。提供商标全球申请路线（中美欧英+马德里130+国）、Nice 45类目防护策略、抢注5大预警、Amazon BR/阿里IPP/eBay VeRO 4大平台备案SOP、撤三异议进攻工具。","keywords":["商标","知识产权","马德里","注册","侵权","Amazon BR","IPP","VeRO"],"opener":"你好！我来帮你保护品牌知识产权。请告诉我：①品牌名称 ②主要销售市场 ③目前是否已注册商标，我给你全球申请路线+Nice类目防护策略+平台备案SOP+抢注预警。"},
+  {"id":"DID-F568CC77-BD53FBBA","name":"利润分析Agent","category":"财务风控","desc":"外贸利润穿透分析（揪出'看着赚其实亏'的订单）。三层穿透：账面毛利→隐藏成本扣除（退货/售后/广告/汇损/坏账/返工）→真实利润；识别'血汗订单/血汗客户/血汗产品/血汗业务员'红黑清单+利润提升5大杠杆。","keywords":["利润分析","毛利","真实利润","血汗客户","隐藏成本","利润穿透"],"opener":"你好！我来帮你做利润穿透分析。请告诉我：①某个产品或客户的账面毛利 ②实际发生的售后/退货/广告费用 ③你怀疑哪个地方在亏钱，我帮你找出真实利润+血汗清单+利润提升杠杆。"},
+  {"id":"DID-F9B4B2E0-6E83DC8C","name":"趋势选品Agent","category":"选品供应链","desc":"外贸趋势选品（反推潜力品）。5大渠道反推：TikTok热销+Amazon BSR/Movers&Shakers+Google Trends 5年图+阿里国际站热搜+社媒爆款；输出30候选品打分矩阵+潜力指数公式+生命周期阶段判断+进入窗口期+Kill List。","keywords":["趋势选品","TikTok","Amazon BSR","Google Trends","潜力品","生命周期","爆款"],"opener":"你好！我来帮你找下一个潜力爆款。请告诉我：①你的经营品类或擅长方向 ②目标市场（美/欧/东南亚等）③你能接受的选品预算范围，我从5大渠道反推给你30个候选品+生命周期判断+进入窗口期评估。"},
+  {"id":"MID-CN-S01-SOCIAL-MEDIA","name":"社媒运营文案专家","category":"营销获客","desc":"国内全平台社媒运营与文案撰写专家。覆盖小红书/抖音/微信公众号/视频号/微博/B站/知乎/今日头条/西瓜视频九大平台，提供平台差异化内容策略、爆款文案公式、选题日历、标题钩子、数据复盘、账号冷启动SOP。","keywords":["社媒","小红书","抖音","公众号","视频号","微博","B站","知乎","爆款文案","国内社媒"],"opener":"你好！我来帮你写爆款社媒内容。请告诉我：①发布平台（小红书/抖音/公众号等）②产品或主题 ③目标受众，我给你标题+正文+话题标签+发布时间建议，直接复制发布。"},
+  {"id":"MID-DTC-S01-STORE-OPS","name":"独立站运营专家","category":"独立站","desc":"外贸独立站（Shopify/WooCommerce）全链路运营实战。覆盖建站选品、Google/Meta/TikTok广告投放、SEO内容矩阵、KOL网红投放、CRO转化优化、EDM邮件自动化、弃单挽回、用户留存复购、GA4数据诊断五大板块。","keywords":["独立站","Shopify","DTC","广告","SEO","EDM","弃单","CRO","转化率"],"opener":"你好！我来帮你优化独立站运营。请告诉我：①你的独立站平台（Shopify/WooCommerce等）②当前最大的痛点（流量/转化/留存/广告ROI）③月访问量和转化率，我给你具体的优化行动方案。"},
+  {"id":"MID-MARKETINTEL-C7F0EB-0001-9A1B2C","name":"经营情报中心","category":"选品供应链","desc":"多维度选品分析、趋势研判、市场可行性评估（4个技能模块：市场洞察选品/可行性审计/产品选品/趋势时机分析），帮你做go/no-go决策。","keywords":["情报","市场分析","趋势","竞品","选品研究","可行性","TikTok趋势","go/no-go"],"opener":"你好！我来帮你做市场情报分析。请告诉我：①想研究的产品品类 ②目标市场 ③是要验证选品方向还是判断竞争格局，我给你多维度市场分析+go/no-go决策建议。"},
+  {"id":"MID-NEWBIZ-S01-PRODUCT-SELECT","name":"新商选品美工","category":"选品供应链","desc":"阿里国际站产品物料包交付流水线。从类目、关键词、商品链接或SKU清单出发，自动完成找货选品、候选打分、挑款报告、AI做图、标题属性文案和质检，按「一个产品一个文件夹」交付可直接发品的完整物料包。","keywords":["选品","美工","物料包","发品","阿里国际站","主图","详情页","新商"],"opener":"你好！开始今天的工作吧。请告诉我：①你的经营品类或关键词 ②目标市场，我来帮你选品打分、制作主图详情页、完成可直接发品的完整物料包。"},
+  {"id":"MID-NEWBIZ-S02-SUPPLIER","name":"新商供应链落地","category":"供应链","desc":"全行业供应链寻找与供应商验证落地指南。不限行业，交付可直接打开链接、直接联系、直接询价、可直接安排打样的供应商落地清单。","keywords":["供应商","货源","工厂","供应链","新商","1688","落地清单","打样"],"opener":"你好！我来帮你找可落地的供应商。请直接告诉我产品品类（中英文均可），我给你可直接联系（含电话/微信/WhatsApp）的供应商落地清单，不是模糊推荐。"},
+  {"id":"MID-NEWBIZ-S03-LISTING","name":"新商主图详情页","category":"发品上架","desc":"阿里国际站主图和商品详情页制作工具。提供产品链接或上传商品图片，AI制作主图（banner图、场景图、卖点图）和B端详情页，生成英文产品描述，优化listing，配置品牌视觉规范。","keywords":["主图","详情页","listing","B端","英文描述","视觉","新商","阿里国际站"],"opener":"你好！我来帮你制作阿里国际站主图和详情页。请提供：产品链接（阿里/1688）或上传产品图片+描述，我自动制作banner图、场景图、卖点图和B端详情页。"},
+  {"id":"MID-NEWBIZ-S04-BUYER-CHECK","name":"新商买家背调","category":"客户管理","desc":"OSINT商业背调与尽职调查。整合公开注册信息、社交媒体、供应链、新闻和网络足迹，构建经验证的买家风险画像，在成交前给出明确的合作/风控/拒绝决策建议。","keywords":["背调","买家背调","OSINT","风险","尽调","合作决策","新商"],"opener":"你好！我来帮你背调这个买家。请提供：买家邮箱、公司名或官网地址，我给你公司真实情况+决策人背景+风险信号+合作建议（合作/谨慎/拒绝）。"},
+  {"id":"MID-NEWBIZ-S05-INQUIRY-DIAG","name":"新商询盘诊断","category":"询盘成交","desc":"阿里国际站询盘深度诊断（V4.9标准）。通过切片化诊断逻辑识别业务员沟通中的逻辑漏洞，提供精准的跟进话术脚本，输出按模板格式的诊断报告，帮助业务员把询盘转化率从均值提升到15%以上。","keywords":["询盘诊断","话术","漏洞","跟进","转化率","诊断报告","新商"],"opener":"你好！请把你和客户的往来邮件粘贴给我（V4.9切片诊断），我来找出话术漏洞、指出哪里错过了成交信号，并给你可直接发出的改进版回复。"},
+  {"id":"MID-NEWBIZ-S06-OPS-PATROL","name":"新商运营巡逻","category":"发品上架","desc":"阿里国际站全链路运营深度实战。涵盖店铺基建、数据诊断、营销投放及优化落地四大板块，帮助新商快速从0到1建立阿里国际站运营体系。","keywords":["运营","巡逻","店铺","新商","P4P","RFQ","数据诊断","阿里国际站"],"opener":"你好！我来帮你巡逻阿里国际站店铺。请告诉我：①你的店铺主营品类 ②最近最让你头疼的问题（流量/询盘/转化/P4P/RFQ），我给你本周必须做的3件事+可执行的操作步骤。"}
+];
+
+// ===================== 分类图标映射 =====================
+const CAT_ICONS = {
+  "发品上架":"📦","经营管理":"📊","订单物流":"🚚","客户管理":"👥","财务风控":"💰",
+  "询盘成交":"💬","营销获客":"📢","战略规划":"🎯","合规风控":"⚖️","供应链":"🏭",
+  "品牌营销":"✨","综合助手":"🤖","选品供应链":"🔍","独立站":"🌐"
+};
+
+// ===================== 状态 =====================
+let currentCat = '全部';
+let currentSearch = '';
+let selectedAgent = null;
+
+// ===================== 搜索逻辑 =====================
+function scoreAgent(agent, query) {
+  if (!query) return 1;
+  const q = query.toLowerCase();
+  const terms = q.split(/\s+/).filter(Boolean);
+  let score = 0;
+  const nameL = agent.name.toLowerCase();
+  const descL = agent.desc.toLowerCase();
+  const kwL = agent.keywords.map(k => k.toLowerCase());
+  const catL = agent.category.toLowerCase();
+  for (const t of terms) {
+    if (nameL.includes(t)) score += 10;
+    if (catL.includes(t)) score += 5;
+    if (kwL.some(k => k.includes(t))) score += 8;
+    if (descL.includes(t)) score += 3;
+    // 模糊：逐字
+    for (const c of t) {
+      if (nameL.includes(c)) score += 0.5;
+      if (kwL.some(k => k.includes(c))) score += 0.3;
+    }
+  }
+  return score;
+}
+
+function getFiltered() {
+  let list = AGENTS_DB;
+  if (currentCat !== '全部') list = list.filter(a => a.category === currentCat);
+  if (currentSearch) {
+    const scored = list.map(a => ({ agent: a, score: scoreAgent(a, currentSearch) }))
+      .filter(x => x.score > 0)
+      .sort((a, b) => b.score - a.score);
+    return { items: scored.map(x => x.agent), scores: Object.fromEntries(scored.map(x => [x.agent.id, x.score])) };
+  }
+  return { items: list, scores: {} };
+}
+
+function onSearch(v) {
+  currentSearch = v.trim();
+  render();
+}
+
+function doSearch() {
+  currentSearch = document.getElementById('searchInput').value.trim();
+  render();
+}
+
+function quickSearch(q) {
+  document.getElementById('searchInput').value = q;
+  currentSearch = q;
+  currentCat = '全部';
+  document.querySelectorAll('.cat-item').forEach(el => el.classList.remove('active'));
+  document.querySelector('[data-cat="全部"]').classList.add('active');
+  render();
+}
+
+function filterCat(cat, el) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-item').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+  closeDrawer();
+  render();
+}
+
+// ===================== 渲染 =====================
+function render() {
+  const { items, scores } = getFiltered();
+  const grid = document.getElementById('agentsGrid');
+  const title = document.getElementById('resultTitle');
+  const count = document.getElementById('resultCount');
+
+  if (currentSearch) {
+    title.textContent = `「${currentSearch}」的匹配结果`;
+    count.textContent = `共 ${items.length} 个智能体`;
+  } else if (currentCat !== '全部') {
+    title.textContent = `${CAT_ICONS[currentCat]||''} ${currentCat}`;
+    count.textContent = `${items.length} 个智能体`;
+  } else {
+    title.textContent = '全部智能体（76个）';
+    count.textContent = '';
+  }
+
+  if (!items.length) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="icon">🔍</div><p>没有找到匹配的智能体，换个关键词试试</p></div>';
+    return;
+  }
+
+  const maxScore = Math.max(...Object.values(scores), 1);
+  grid.innerHTML = items.map(a => {
+    const icon = CAT_ICONS[a.category] || '🤖';
+    const score = scores[a.id];
+    const pct = score ? Math.round((score / maxScore) * 100) : 0;
+    const isSelected = selectedAgent && selectedAgent.id === a.id;
+    const kws = a.keywords.slice(0, 4).map(k => `<span class="kw-tag">${k}</span>`).join('');
+    const scoreHtml = score > 0 ? `<span class="match-score" style="background:#eff6ff;color:#2563eb;">${pct >= 80 ? '⭐ 强匹配' : pct >= 50 ? '推荐' : '相关'}</span>` : '';
+    return `<div class="agent-card${isSelected ? ' selected' : ''}" onclick="selectAgent('${a.id}')">
+      ${scoreHtml}
+      <div class="card-top">
+        <div class="card-icon icon-${a.category}">${icon}</div>
+        <div class="card-info">
+          <div class="card-name">${a.name}</div>
+          <div class="card-cat"><span class="cat-badge cat-${a.category}">${a.category}</span></div>
+        </div>
+      </div>
+      <div class="card-desc">${a.desc}</div>
+      <div class="card-keywords">${kws}</div>
+      <div class="card-actions">
+        <button class="btn-sm btn-primary" onclick="event.stopPropagation();viewDetail('${a.id}')">查看详情 & 提示词</button>
+        <button class="btn-sm btn-outline" onclick="event.stopPropagation();deployGuide('${a.id}')">部署指引</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ===================== 智能体详情 =====================
+function getAgent(id) { return AGENTS_DB.find(a => a.id === id); }
+
+function selectAgent(id) {
+  selectedAgent = getAgent(id);
+  render();
+  viewDetail(id);
+}
+
+function viewDetail(id) {
+  const a = getAgent(id);
+  if (!a) return;
+  selectedAgent = a;
+
+  const drawer = document.getElementById('drawer');
+  drawer.classList.remove('hidden');
+
+  document.getElementById('drawerName').textContent = a.name;
+  document.getElementById('drawerCatBadge').innerHTML = `<span class="cat-badge cat-${a.category}" style="font-size:11px;padding:2px 8px;border-radius:10px;">${CAT_ICONS[a.category]||''} ${a.category}</span>`;
+
+  const systemPrompt = buildSystemPrompt(a);
+  const body = document.getElementById('drawerBody');
+  body.innerHTML = `
+    <div class="section-label">智能体简介</div>
+    <div class="desc-box">${a.desc}</div>
+
+    <div class="section-label">🎯 开场白（复制后在 Accio 对话框发送）</div>
+    <div class="opener-box">${a.opener}</div>
+    <button class="copy-btn" onclick="copyText(\`${escapeForAttr(a.opener)}\`, this)">📋 复制开场白话术</button>
+
+    <div class="section-label">⚙️ System Prompt（可用于其他AI工具）</div>
+    <div class="prompt-box">${escapeHtml(systemPrompt)}</div>
+    <button class="copy-btn" onclick="copyText(\`${escapeForAttr(systemPrompt)}\`, this)">📋 复制 System Prompt</button>
+
+    <div class="section-label">🏷️ 关键词标签</div>
+    <div class="kw-list">${a.keywords.map(k => `<span class="kw-full">${k}</span>`).join('')}</div>
+
+    <div class="deploy-section">
+      <div class="deploy-title">🚀 一键部署到 Accio 客户端</div>
+      <div class="deploy-steps">
+        <b>步骤1：</b>下载 <code>waidi-agent-kit.zip</code>（同目录）<br>
+        <b>步骤2：</b>解压后在终端执行：<br>
+        <code style="display:block;margin:6px 0;padding:6px;background:rgba(0,0,0,.08);border-radius:4px;">bash waidi-agent-kit/deploy.sh</code>
+        <b>步骤3：</b>部署完成后重启 Accio 客户端<br>
+        <b>步骤4：</b>在智能体列表找到「${a.name}」即可使用
+      </div>
+      <button class="deploy-btn" onclick="showDeployDetail('${a.id}')">📋 查看该智能体部署命令</button>
+    </div>
+  `;
+  render();
+}
+
+function deployGuide(id) {
+  viewDetail(id);
+  setTimeout(() => {
+    const el = document.querySelector('.deploy-section');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }, 100);
+}
+
+function showDeployDetail(id) {
+  const a = getAgent(id);
+  const cmd = `# 部署「${a.name}」\nbash waidi-agent-kit/deploy.sh\n\n# 如需单独安装此智能体，在 Accio 中直接找到「${a.name}」`;
+  copyText(cmd, null);
+  showToast('部署命令已复制到剪贴板');
+}
+
+function buildSystemPrompt(a) {
+  return `你是一名专业的外贸AI助手，专门负责【${a.name.replace('Agent','').trim()}】相关工作。
+
+## 核心职责
+${a.desc}
+
+## 工作原则
+1. 直接给出可执行的具体方案，不说模糊建议
+2. 用数字和数据说话，不说"建议加强"这类废话  
+3. 每次输出都要有明确的下一步行动清单
+4. 对用户提供的信息诚实回应，找不到的写N/A
+
+## 适用关键词
+${a.keywords.join('、')}
+
+## 开场白
+${a.opener}
+
+## 输出要求
+- 结论优先，理由在后
+- 用表格/列表组织信息，方便操作
+- 风险必须量化（如：延误3天=客户罚款$500）
+- 每个建议带责任人和截止日期`;
+}
+
+function closeDrawer() {
+  document.getElementById('drawer').classList.add('hidden');
+  selectedAgent = null;
+  render();
+}
+
+// ===================== 工具函数 =====================
+function escapeHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function escapeForAttr(s) {
+  return s.replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$');
+}
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('已复制到剪贴板');
+    if (btn) { btn.textContent = '✅ 已复制'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = '📋 复制'; btn.classList.remove('copied'); }, 2000); }
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    showToast('已复制');
+    if (btn) { btn.textContent = '✅ 已复制'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = '📋 复制'; btn.classList.remove('copied'); }, 2000); }
+  });
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ===================== 初始化 =====================
+render();
+</script>
+</body>
+</html>
