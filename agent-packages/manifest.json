@@ -1,0 +1,452 @@
+[
+  {
+    "id": "DID-01EC9671-35C7EAD1",
+    "name": "店铺装修Agent",
+    "file": "店铺装修Agent.zip",
+    "size_kb": 345
+  },
+  {
+    "id": "DID-03ABBF9D-C2B66B3A",
+    "name": "月度复盘Agent",
+    "file": "月度复盘Agent.zip",
+    "size_kb": 410
+  },
+  {
+    "id": "DID-04DA0953-72660445",
+    "name": "订单看板Agent",
+    "file": "订单看板Agent.zip",
+    "size_kb": 292
+  },
+  {
+    "id": "DID-0553E0AE-BBA4C2C4",
+    "name": "VIP经营Agent",
+    "file": "VIP经营Agent.zip",
+    "size_kb": 503
+  },
+  {
+    "id": "DID-06E2BB38-171EB620",
+    "name": "汇率对冲Agent",
+    "file": "汇率对冲Agent.zip",
+    "size_kb": 423
+  },
+  {
+    "id": "DID-09F9A156-DE126983",
+    "name": "团队OKR Agent",
+    "file": "团队OKR-Agent.zip",
+    "size_kb": 425
+  },
+  {
+    "id": "DID-0A2C17F1-A9FCC213",
+    "name": "报价单Agent",
+    "file": "报价单Agent.zip",
+    "size_kb": 251
+  },
+  {
+    "id": "DID-0AB0AE95-6DEF917D",
+    "name": "多语言本地化Agent",
+    "file": "多语言本地化Agent.zip",
+    "size_kb": 298
+  },
+  {
+    "id": "DID-10425E76-1B4CE7FD",
+    "name": "展会策划Agent",
+    "file": "展会策划Agent.zip",
+    "size_kb": 433
+  },
+  {
+    "id": "DID-15CCAD9B-CEDF3102",
+    "name": "谈判教练Agent",
+    "file": "谈判教练Agent.zip",
+    "size_kb": 344
+  },
+  {
+    "id": "DID-1D64AA4D-A9CAEC02",
+    "name": "复购唤醒Agent",
+    "file": "复购唤醒Agent.zip",
+    "size_kb": 398
+  },
+  {
+    "id": "DID-1DAB0FA6-1DCC1E69",
+    "name": "战略路线图Agent",
+    "file": "战略路线图Agent.zip",
+    "size_kb": 339
+  },
+  {
+    "id": "DID-1E12068E-3BD52487",
+    "name": "社媒矩阵Agent",
+    "file": "社媒矩阵Agent.zip",
+    "size_kb": 453
+  },
+  {
+    "id": "DID-213265D6-EB0AF010",
+    "name": "合同PI审查Agent",
+    "file": "合同PI审查Agent.zip",
+    "size_kb": 358
+  },
+  {
+    "id": "DID-2D9DA406-20EA3D95",
+    "name": "Listing大师Agent",
+    "file": "Listing大师Agent.zip",
+    "size_kb": 127
+  },
+  {
+    "id": "DID-37857006-0E62439F",
+    "name": "组织架构Agent",
+    "file": "组织架构Agent.zip",
+    "size_kb": 282
+  },
+  {
+    "id": "DID-37A2CBCB-9A9F39D5",
+    "name": "专利IP风控Agent",
+    "file": "专利IP风控Agent.zip",
+    "size_kb": 399
+  },
+  {
+    "id": "DID-3A0D49C6-B27E0BC5",
+    "name": "销量预测Agent",
+    "file": "销量预测Agent.zip",
+    "size_kb": 350
+  },
+  {
+    "id": "DID-3E0F6FB4-A783F37E",
+    "name": "报关单证Agent",
+    "file": "报关单证Agent.zip",
+    "size_kb": 452
+  },
+  {
+    "id": "DID-449E3F14-D7DB5130",
+    "name": "打样跟进Agent",
+    "file": "打样跟进Agent.zip",
+    "size_kb": 336
+  },
+  {
+    "id": "DID-46E4D8A6-DC4E632B",
+    "name": "回复话术Agent",
+    "file": "回复话术Agent.zip",
+    "size_kb": 314
+  },
+  {
+    "id": "DID-471EB6DC-BC225B8A",
+    "name": "画像生成Agent",
+    "file": "画像生成Agent.zip",
+    "size_kb": 368
+  },
+  {
+    "id": "DID-50E9B31E-F047154C",
+    "name": "市场洞察Agent",
+    "file": "市场洞察Agent.zip",
+    "size_kb": 470
+  },
+  {
+    "id": "DID-56ECD59D-B3D3A690",
+    "name": "客户分层Agent",
+    "file": "客户分层Agent.zip",
+    "size_kb": 334
+  },
+  {
+    "id": "DID-5B6B74AE-3E98D380",
+    "name": "经营仪表盘Agent",
+    "file": "经营仪表盘Agent.zip",
+    "size_kb": 394
+  },
+  {
+    "id": "DID-5DD0D11B-67DCEA4E",
+    "name": "流失客户挽回Agent",
+    "file": "流失客户挽回Agent.zip",
+    "size_kb": 340
+  },
+  {
+    "id": "DID-608349B6-8BB6ABE5",
+    "name": "EDM邮件Agent",
+    "file": "EDM邮件Agent.zip",
+    "size_kb": 307
+  },
+  {
+    "id": "DID-626CAA53-A0E68810",
+    "name": "生产排期Agent",
+    "file": "生产排期Agent.zip",
+    "size_kb": 309
+  },
+  {
+    "id": "DID-6B5D80D6-C614373F",
+    "name": "业务员业绩Agent",
+    "file": "业务员业绩Agent.zip",
+    "size_kb": 317
+  },
+  {
+    "id": "DID-6E8C4DE8-4E60DAD2",
+    "name": "站外引流Agent",
+    "file": "站外引流Agent.zip",
+    "size_kb": 374
+  },
+  {
+    "id": "DID-73FCE03E-12525E53",
+    "name": "P4P智投Agent",
+    "file": "P4P智投Agent.zip",
+    "size_kb": 327
+  },
+  {
+    "id": "DID-76EB8806-4E2F9431",
+    "name": "岗位JD Agent",
+    "file": "岗位JD-Agent.zip",
+    "size_kb": 501
+  },
+  {
+    "id": "DID-7C14389C-532D6B30",
+    "name": "目标国家Agent",
+    "file": "目标国家Agent.zip",
+    "size_kb": 470
+  },
+  {
+    "id": "DID-7DBB916F-AF9C081C",
+    "name": "案例见证Agent",
+    "file": "案例见证Agent.zip",
+    "size_kb": 127
+  },
+  {
+    "id": "DID-84607868-453B02DF",
+    "name": "业务诊断Agent",
+    "file": "业务诊断Agent.zip",
+    "size_kb": 556
+  },
+  {
+    "id": "DID-88A7231C-D8B3FB4D",
+    "name": "质检验货Agent",
+    "file": "质检验货Agent.zip",
+    "size_kb": 370
+  },
+  {
+    "id": "DID-8B58BA1E-AE89E0C5",
+    "name": "物流方案Agent",
+    "file": "物流方案Agent.zip",
+    "size_kb": 316
+  },
+  {
+    "id": "DID-8E6EB61F-1BDBE268",
+    "name": "入职培养Agent",
+    "file": "入职培养Agent.zip",
+    "size_kb": 330
+  },
+  {
+    "id": "DID-91D91887-D29C279F",
+    "name": "AIGC视觉Agent",
+    "file": "AIGC视觉Agent.zip",
+    "size_kb": 407
+  },
+  {
+    "id": "DID-946064E0-ACE96A28",
+    "name": "品牌出海路线图Agent",
+    "file": "品牌出海路线图Agent.zip",
+    "size_kb": 335
+  },
+  {
+    "id": "DID-984B0756-476F9280",
+    "name": "认证合规Agent",
+    "file": "认证合规Agent.zip",
+    "size_kb": 370
+  },
+  {
+    "id": "DID-99298CFD-837334B4",
+    "name": "关键词矩阵Agent",
+    "file": "关键词矩阵Agent.zip",
+    "size_kb": 387
+  },
+  {
+    "id": "DID-9E24B1C0-3E726222",
+    "name": "客户背调Agent",
+    "file": "客户背调Agent.zip",
+    "size_kb": 487
+  },
+  {
+    "id": "DID-9EF8F7C2-A83530B8",
+    "name": "收款风控Agent",
+    "file": "收款风控Agent.zip",
+    "size_kb": 387
+  },
+  {
+    "id": "DID-9F1F1466-898B47FC",
+    "name": "供应商匹配Agent",
+    "file": "供应商匹配Agent.zip",
+    "size_kb": 329
+  },
+  {
+    "id": "DID-A5B45664-3A0D9523",
+    "name": "知识库Agent",
+    "file": "知识库Agent.zip",
+    "size_kb": 424
+  },
+  {
+    "id": "DID-A89B1BA1-5D001DC8",
+    "name": "出口认证路线图Agent",
+    "file": "出口认证路线图Agent.zip",
+    "size_kb": 159
+  },
+  {
+    "id": "DID-ACC52A6C-7DAB8E48",
+    "name": "视频脚本Agent",
+    "file": "视频脚本Agent.zip",
+    "size_kb": 331
+  },
+  {
+    "id": "DID-AD435E2B-82A44ED4",
+    "name": "包装标签Agent",
+    "file": "包装标签Agent.zip",
+    "size_kb": 435
+  },
+  {
+    "id": "DID-B3D50A9D-0A9D51C7",
+    "name": "品牌定位Agent",
+    "file": "品牌定位Agent.zip",
+    "size_kb": 490
+  },
+  {
+    "id": "DID-B5591E90-BC5C814D",
+    "name": "品牌资产库Agent",
+    "file": "品牌资产库Agent.zip",
+    "size_kb": 264
+  },
+  {
+    "id": "DID-B5C3B8E7-963F8927",
+    "name": "合规雷达Agent",
+    "file": "合规雷达Agent.zip",
+    "size_kb": 398
+  },
+  {
+    "id": "DID-BB1D1622-9E09C025",
+    "name": "询盘分级Agent",
+    "file": "询盘分级Agent.zip",
+    "size_kb": 395
+  },
+  {
+    "id": "DID-C05A5B91-00524CE8",
+    "name": "RFQ抢单Agent",
+    "file": "RFQ抢单Agent.zip",
+    "size_kb": 329
+  },
+  {
+    "id": "DID-C0EABD5B-AA1784D4",
+    "name": "询盘巡检Agent",
+    "file": "询盘巡检Agent.zip",
+    "size_kb": 471
+  },
+  {
+    "id": "DID-C79D75F1-C45FF0AF",
+    "name": "出口退税Agent",
+    "file": "出口退税Agent.zip",
+    "size_kb": 342
+  },
+  {
+    "id": "DID-CCE08454-AB906A06",
+    "name": "信用贷信保理赔Agent",
+    "file": "信用贷信保理赔Agent.zip",
+    "size_kb": 328
+  },
+  {
+    "id": "DID-D2CD0B11-E0ACAC8A",
+    "name": "利润测算Agent",
+    "file": "利润测算Agent.zip",
+    "size_kb": 332
+  },
+  {
+    "id": "DID-D41CB43F-D07D1787",
+    "name": "客诉处理Agent",
+    "file": "客诉处理Agent.zip",
+    "size_kb": 505
+  },
+  {
+    "id": "DID-D464A3-73D464A3U1781698-9627-82D65F",
+    "name": "国际站生意助手",
+    "file": "国际站生意助手.zip",
+    "size_kb": 18
+  },
+  {
+    "id": "DID-DDF62985-238D1F13",
+    "name": "样品转单Agent",
+    "file": "样品转单Agent.zip",
+    "size_kb": 155
+  },
+  {
+    "id": "DID-DE9D0C5B-8085AB7C",
+    "name": "BOSS直聘招聘Agent",
+    "file": "BOSS直聘招聘Agent.zip",
+    "size_kb": 364
+  },
+  {
+    "id": "DID-DFD34AC2-5108F56A",
+    "name": "决策人识别Agent",
+    "file": "决策人识别Agent.zip",
+    "size_kb": 374
+  },
+  {
+    "id": "DID-DFE3021C-BB817D26",
+    "name": "竞品扫描Agent",
+    "file": "竞品扫描Agent.zip",
+    "size_kb": 407
+  },
+  {
+    "id": "DID-F3AA112D-DEC4CCE9",
+    "name": "商标知产保护Agent",
+    "file": "商标知产保护Agent.zip",
+    "size_kb": 526
+  },
+  {
+    "id": "DID-F568CC77-BD53FBBA",
+    "name": "利润分析Agent",
+    "file": "利润分析Agent.zip",
+    "size_kb": 363
+  },
+  {
+    "id": "DID-F9B4B2E0-6E83DC8C",
+    "name": "趋势选品Agent",
+    "file": "趋势选品Agent.zip",
+    "size_kb": 313
+  },
+  {
+    "id": "MID-CN-S01-SOCIAL-MEDIA",
+    "name": "社媒运营文案专家",
+    "file": "社媒运营文案专家.zip",
+    "size_kb": 83
+  },
+  {
+    "id": "MID-DTC-S01-STORE-OPS",
+    "name": "独立站运营专家",
+    "file": "独立站运营专家.zip",
+    "size_kb": 373
+  },
+  {
+    "id": "MID-NEWBIZ-S01-PRODUCT-SELECT",
+    "name": "新商选品美工",
+    "file": "新商选品美工.zip",
+    "size_kb": 326
+  },
+  {
+    "id": "MID-NEWBIZ-S02-SUPPLIER",
+    "name": "新商供应链落地",
+    "file": "新商供应链落地.zip",
+    "size_kb": 93
+  },
+  {
+    "id": "MID-NEWBIZ-S03-LISTING",
+    "name": "新商主图详情页",
+    "file": "新商主图详情页.zip",
+    "size_kb": 331
+  },
+  {
+    "id": "MID-NEWBIZ-S04-BUYER-CHECK",
+    "name": "新商买家背调",
+    "file": "新商买家背调.zip",
+    "size_kb": 413
+  },
+  {
+    "id": "MID-NEWBIZ-S05-INQUIRY-DIAG",
+    "name": "新商询盘诊断",
+    "file": "新商询盘诊断.zip",
+    "size_kb": 315
+  },
+  {
+    "id": "MID-NEWBIZ-S06-OPS-PATROL",
+    "name": "新商运营巡逻",
+    "file": "新商运营巡逻.zip",
+    "size_kb": 145
+  }
+]
